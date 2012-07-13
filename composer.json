@@ -1,0 +1,27 @@
+{
+    "name": "kgilden/pager-bundle",
+    "type": "symfony-bundle",
+    "version": "dev-master",
+    "description": "Symfony KGPagerBundle",
+    "keywords": ["pagination"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kristen Gilden",
+            "email": "gilden@planet.ee",
+            "homepage": "http://kgilden.eu"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": ">=2.0",
+        "symfony/security-bundle": ">=2.0"
+    },
+    "require-dev": {
+    	"doctrine/orm": "2.2.*"
+    },
+    "autoload": {
+        "psr-0": {"KG\\Bundle": ""}
+    },
+    "target-dir": "KG/Bundle/PagerBundle"
+}
