@@ -30,10 +30,10 @@ class ContainerAwarePagerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($pager->supports(new \stdClass()));
     }
 
-    public function testPaginateCallsEngine()
+    public function testPaginateCallsprovider()
     {
-        $engine = $this->getMockEngine();
-        $engine
+        $provider = $this->getMockProvider();
+        $provider
             ->expects($this->once())
             ->method('getPageResult')
         ;
@@ -43,7 +43,7 @@ class ContainerAwarePagerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('get')
             ->with('bar')
-            ->will($this->returnValue($engine))
+            ->will($this->returnValue($provider))
         ;
 
         $pager = new ContainerAwarePager(array('stdClass' => 'bar'));
@@ -51,10 +51,10 @@ class ContainerAwarePagerTest extends \PHPUnit_Framework_TestCase
         $pager->paginate(new \stdClass());
     }
 
-    public function testStringCallsSqlEngine()
+    public function testStringCallsSqlprovider()
     {
-        $engine = $this->getMockEngine();
-        $engine
+        $provider = $this->getMockProvider();
+        $provider
             ->expects($this->once())
             ->method('getPageResult')
         ;
@@ -64,7 +64,7 @@ class ContainerAwarePagerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('get')
             ->with('bar')
-            ->will($this->returnValue($engine));
+            ->will($this->returnValue($provider));
         ;
 
         $pager = new ContainerAwarePager(array('sql' => 'bar'));
@@ -72,10 +72,10 @@ class ContainerAwarePagerTest extends \PHPUnit_Framework_TestCase
         $pager->paginate('SELECT random FROM queries');
     }
 
-    public function testArrayCallsArrayEngine()
+    public function testArrayCallsArrayprovider()
     {
-        $engine = $this->getMockEngine();
-        $engine
+        $provider = $this->getMockProvider();
+        $provider
             ->expects($this->once())
             ->method('getPageResult')
         ;
@@ -85,7 +85,7 @@ class ContainerAwarePagerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('get')
             ->with('bar')
-            ->will($this->returnValue($engine))
+            ->will($this->returnValue($provider))
         ;
 
         $pager = new ContainerAwarePager(array('array' => 'bar'));
@@ -104,8 +104,8 @@ class ContainerAwarePagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockEngine()
+    protected function getMockProvider()
     {
-        return $this->getMock('KG\\Bundle\\PagerBundle\\Pager\\Engine\\EngineInterface');
+        return $this->getMock('KG\\Bundle\\PagerBundle\\Result\\Provider\\ProviderInterface');
     }
 }

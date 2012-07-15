@@ -9,21 +9,21 @@
  * file that was distributed with this source code.
  */
 
-namespace KG\Bundle\PagerBundle\Pager\Engine;
+namespace KG\Bundle\PagerBundle\Result\Provider;
 
 use KG\Bundle\PagerBundle\Result\Collection;
 
 /**
- * Each engine implementing an EngineInterface is specialised to page only
- * a specific dataset. For example, there might be an engine for paging
- * array, Doctrine's ORM Query etc.
+ * Result providers abstract away the specific way the total number of results
+ * and results themselves are provided. For example, there might be a provider
+ * for paging an array, Doctrine's ORM Query etc.
  *
  * @author Kristen Gilden <gilden@planet.ee>
  */
-interface EngineInterface
+interface ProviderInterface
 {
     /**
-     * Paginates the query and returns the collection.
+     * Paginates the query and returns the results in a collection.
      *
      * @param mixed $query      A query to be paginated
      *

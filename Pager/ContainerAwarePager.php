@@ -11,8 +11,8 @@
 
 namespace KG\Bundle\PagerBundle\Pager;
 
-use KG\Bundle\PagerBundle\Pager\Engine\EngineInterface;
 use KG\Bundle\PagerBundle\Pager\PagerInterface;
+use KG\Bundle\PagerBundle\Result\Provider\ProviderInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 /**
@@ -39,9 +39,9 @@ class ContainerAwarePager extends ContainerAware implements PagerInterface
      */
     public function paginate($query)
     {
-        $engine = $this->getEngineForQuery($query);
+        $provider = $this->getProviderForQuery($query);
 
-        return $engine->getPageResult($query);
+        return $provider->getPageResult($query);
     }
 
     /**
@@ -55,9 +55,9 @@ class ContainerAwarePager extends ContainerAware implements PagerInterface
     }
 
     /**
-     * @return EngineInterface
+     * @return ProviderInterface
      */
-    protected function getEngineForQuery($query)
+    protected function getProviderForQuery($query)
     {
         $type = $this->getType($query);
 
