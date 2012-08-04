@@ -9,19 +9,19 @@
  * file that was distributed with this source code.
  */
 
-namespace KG\Bundle\PagerBundle\Pager;
-
-use KG\Bundle\PagerBundle\Result\Collection;
+namespace KG\Bundle\PagerBundle;
 
 /**
  * @author Kristen Gilden <gilden@planet.ee>
  */
-interface PagerInterface
+class PagerEvents
 {
     /**
-     * @param mixed $target    The target to be paginated.
+     * The pager.paginate event is fired every time something needs to
+     * be paged. The pager with the knowledge to paginate the target
+     * should notify itself via the event.
      *
-     * @return Collection
+     * @var string
      */
-    function paginate($target);
+    const PAGINATE = 'pager.paginate';
 }
