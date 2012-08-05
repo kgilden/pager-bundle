@@ -3,5 +3,19 @@
 <container xmlns="http://symfony.com/schema/dic/services"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    
+    <parameters>
+        
+        <parameter key="kg_pager.subscribers.array.class">KG\Bundle\PagerBundle\Event\Subscriber\ArraySubscriber</parameter>
+        
+    </parameters>
+    
+    <services>
 
+        <!-- Array paging subscriber -->
+        <service id="kg_pager.subscribers.array" class="%kg_pager.subscribers.array.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+       
+    </services>
 </container>
