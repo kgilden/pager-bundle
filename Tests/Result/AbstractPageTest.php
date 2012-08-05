@@ -25,6 +25,14 @@ class AbstractPageTest extends \PHPUnit_Framework_TestCase
         return $page;
     }
 
+    /**
+     * @depends testAssignment
+     */
+    public function testAll(AbstractPage $page)
+    {
+        $this->assertEquals(array('foo'), $page->all());
+    }
+
     public function testEmptyOffsetAppendsElement()
     {
         $page = $this->getAbstractPage();
@@ -84,7 +92,6 @@ class AbstractPageTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($expected[$key], $val);
         }
     }
-
 
     public function getAbstractPage()
     {

@@ -60,4 +60,11 @@ interface PageInterface extends ArrayAccess, Countable, IteratorAggregate
      * @return boolean
      */
     function isLast();
+
+    /**
+     * Gets all the elements.
+     *
+     * @return array
+     */
+    function all();
 }

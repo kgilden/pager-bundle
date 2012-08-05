@@ -90,6 +90,14 @@ abstract class AbstractPage implements PageInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function all()
+    {
+        return $this->_elements;
+    }
+
+    /**
      * Sets the elements in the page.
      *
      * @param array $elements

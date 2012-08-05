@@ -116,6 +116,16 @@ final class LazyPage extends Page
     /**
      * {@inheritDoc}
      */
+    public function all()
+    {
+        $this->populateElements();
+
+        return parent::all();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function getElementCount()
     {
         if (!isset($this->elementCount)) {
