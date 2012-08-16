@@ -7,6 +7,7 @@
     <parameters>
         
         <parameter key="kg_pager.subscribers.array.class">KG\Bundle\PagerBundle\Event\Subscriber\ArraySubscriber</parameter>
+        <parameter key="kg_pager.subscribers.dbal.class">KG\Bundle\PagerBundle\Event\Subscriber\DBALQueryBuilderSubscriber</parameter>
         <parameter key="kg_pager.subscribers.dql.class">KG\Bundle\PagerBundle\Event\Subscriber\DQLSubscriber</parameter>
         
     </parameters>
@@ -15,6 +16,11 @@
 
         <!-- Array paging subscriber -->
         <service id="kg_pager.subscribers.array" class="%kg_pager.subscribers.array.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+        
+        <!-- DBAL QueryBuilder paging subscriber -->
+        <service id="kg_pager.subscribers.dbal" class="%kg_pager.subscribers.dbal.class%">
             <tag name="kernel.event_subscriber" />
         </service>
         
