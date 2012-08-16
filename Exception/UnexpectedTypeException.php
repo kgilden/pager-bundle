@@ -11,7 +11,7 @@
 
 namespace KG\Bundle\PagerBundle\Exception;
 
-class UnexpectedTypeException extends FileException
+class UnexpectedTypeException extends KGPagerException
 {
     public function __construct($value, $expectedType)
     {
