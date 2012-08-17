@@ -9,6 +9,7 @@
         <parameter key="kg_pager.subscribers.array.class">KG\Bundle\PagerBundle\Event\Subscriber\ArraySubscriber</parameter>
         <parameter key="kg_pager.subscribers.dbal.class">KG\Bundle\PagerBundle\Event\Subscriber\DBALQueryBuilderSubscriber</parameter>
         <parameter key="kg_pager.subscribers.dql.class">KG\Bundle\PagerBundle\Event\Subscriber\DQLSubscriber</parameter>
+        <parameter key="kg_pager.subscribers.orm.class">KG\Bundle\PagerBundle\Event\Subscriber\ORMQueryBuilderSubscriber</parameter>
         
     </parameters>
     
@@ -26,6 +27,11 @@
         
         <!-- DQL paging subscriber -->
         <service id="kg_pager.subscribers.dql" class="%kg_pager.subscribers.dql.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+        
+        <!-- ORM QueryBuilder paging subscriber -->
+        <service id="kg_pager.subscribers.orm" class="%kg_pager.subscribers.orm.class%">
             <tag name="kernel.event_subscriber" />
         </service>
        
