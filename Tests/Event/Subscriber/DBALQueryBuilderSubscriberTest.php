@@ -25,30 +25,15 @@ class DBALQueryBuilderSubscriberTest extends SubscriberTestCase
 
     public function testOnQBPaginateReturnsProviderInterface()
     {
-        $event = $this->getMockPagerEvent();
-        $event
-            ->expects($this->once())
-            ->method('getTarget')
-            ->will($this->returnValue($this->getMockQueryBuilder()))
-        ;
-
-        $event
-            ->expects($this->once())
-            ->method('setProvider')
-            ->with($this->getProviderInterfaceConstraint())
-        ;
+        $builder = $this->getMockQueryBuilder();
+        $event   = $this->getMockPagerEventForPaginate($builder);
 
         $this->subscriber->onQBPaginate($event);
     }
 
     public function testOnQBPaginateReturnsVoid()
     {
-        $event = $this->getMockPagerEvent();
-
-        $event
-            ->expects($this->never())
-            ->method('setProvider')
-        ;
+        $event = $this->getMockPagerEventForPaginateReturnsVoid();
 
         $this->subscriber->onQBPaginate($event);
     }
