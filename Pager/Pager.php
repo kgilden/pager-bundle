@@ -40,9 +40,9 @@ class Pager implements PagerInterface
     /**
      * {@inheritDoc}
      */
-    public function paginate($target)
+    public function paginate($target, array $options = array())
     {
-        $event = new PagerEvent($target);
+        $event = new PagerEvent($target, $options);
 
         $this->dispatcher->dispatch(PagerEvents::PAGINATE, $event);
 

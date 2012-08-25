@@ -19,9 +19,10 @@ use KG\Bundle\PagerBundle\Result\Collection;
 interface PagerInterface
 {
     /**
-     * @param mixed $target    The target to be paginated.
+     * @param mixed $target     The target to be paginated.
+     * @param array $options    Paging specific options.
      *
      * @return Collection
      */
-    function paginate($target);
+    function paginate($target, array $options = array());
 }

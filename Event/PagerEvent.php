@@ -20,6 +20,11 @@ use Symfony\Component\EventDispatcher\Event;
 class PagerEvent extends Event
 {
     /**
+     * @var array
+     */
+    protected $options;
+
+    /**
      * @var ProviderInterface
      */
     protected $provider;
@@ -31,10 +36,20 @@ class PagerEvent extends Event
 
     /**
      * @param mixed $target
+     * @param array $options
      */
-    public function __construct($target)
+    public function __construct($target, array $options = array())
     {
-        $this->target = $target;
+        $this->target  = $target;
+        $this->options = $options;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
     }
 
     /**
