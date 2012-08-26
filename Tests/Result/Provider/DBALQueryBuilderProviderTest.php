@@ -12,6 +12,7 @@
 namespace KG\Bundle\PagerBundle\Tests\Result\Provider;
 
 use KG\Bundle\PagerBundle\Result\Provider\DBALQueryBuilderProvider;
+use KG\Bundle\PagerBundle\Tests\Stub\Query;
 
 /**
  * @author Kristen Gilden <gilden@planet.ee>
@@ -84,6 +85,55 @@ class DBALQueryBuilderProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     */
+    public function testGetElementsEntityManagerTypeException()
+    {
+        $provider = new DBALQueryBuilderProvider($this->getMockQueryBuilder(), array(
+            'entity_manager'     => new \stdClass(),
+            'result_set_mapping' => $this->getMockResultSetMapping(),
+        ));
+        $provider->getElements(0, 10);
+    }
+
+    /**
+     * @expectedException Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     */
+    public function testGetElementsRSMTypeException()
+    {
+        $provider = new DBALQueryBuilderProvider($this->getMockQueryBuilder(), array(
+            'entity_manager'     => $this->getMockEntityManager(),
+            'result_set_mapping' => new \stdClass(),
+        ));
+        $provider->getElements(0, 10);
+    }
+
+    public function testNativeQueryGetElements()
+    {
+        $qb = $this->getMockQueryBuilder();
+        $qb
+            ->expects($this->any())
+            ->method('getParameters')
+            ->will($this->returnValue(array()))
+        ;
+
+        $em = $this->getMockEntityManager();
+
+        // @todo Use mock AbstractQuery
+        $em
+            ->expects($this->once())
+            ->method('createNativeQuery')
+            ->will($this->returnValue(new Query($em)))
+        ;
+
+        $provider = new DBALQueryBuilderProvider($qb, array(
+            'entity_manager'     => $em,
+            'result_set_mapping' => $this->getMockResultSetMapping(),
+        ));
+        $provider->getElements(0, 10);
+    }
+
+    /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockQueryBuilder()
@@ -105,5 +155,37 @@ class DBALQueryBuilderProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock()
         ;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockEntityManager()
+    {
+        return $this
+            ->getMockBuilder('Doctrine\\ORM\\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockAbstractQuery()
+    {
+        return $this
+            ->getMockBuilder('Doctrine\\ORM\\AbstractQuery')
+            ->disableOriginalConstructor()
+            ->setMethods(array('execute'))
+            ->getMockForAbstractClass();
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockResultSetMapping()
+    {
+        return $this->getMock('Doctrine\\ORM\\Query\\ResultSetMapping');
     }
 }

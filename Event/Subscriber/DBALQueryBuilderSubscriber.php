@@ -43,6 +43,6 @@ class DBALQueryBuilderSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $event->setProvider(new DBALQueryBuilderProvider($target));
+        $event->setProvider(new DBALQueryBuilderProvider($target, $event->getOptions()));
     }
 }

@@ -12,14 +12,19 @@
 namespace KG\Bundle\PagerBundle\Result\Provider;
 
 use KG\Bundle\PagerBundle\Exception\UnexpectedTypeException;
+use KG\Bundle\PagerBundle\Options\OptionsAware;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query\ResultSetMapping;
 use PDO;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * @author Kristen Gilden <gilden@planet.ee>
  */
-class DBALQueryBuilderProvider implements ProviderInterface
+class DBALQueryBuilderProvider extends OptionsAware implements ProviderInterface
 {
     /**
      * @var QueryBuilder
@@ -33,9 +38,12 @@ class DBALQueryBuilderProvider implements ProviderInterface
 
     /**
      * @param QueryBuilder $qb
+     * @param array        $options
      */
-    public function __construct(QueryBuilder $qb)
+    public function __construct(QueryBuilder $qb, array $options = array())
     {
+        parent::__construct($options);
+
         $this->qb = $qb;
     }
 
@@ -72,12 +80,47 @@ class DBALQueryBuilderProvider implements ProviderInterface
         $this->qb->setFirstResult($offset);
         $this->qb->setMaxResults($count);
 
-        $stmt = $this->qb->execute();
+        if ($this->options['is_native_query']) {
+            $em   = $this->options['entity_manager'];
+            $rsm  = $this->options['result_set_mapping'];
+            $sql  = $this->qb->getSQL();
 
-        if (!$stmt instanceof Statement) {
-            throw new UnexpectedTypeException($stmt, 'Doctrine\\DBAL\\Driver\\Statement');
+            $query = $em->createNativeQuery($sql, $rsm);
+            $query->setParameters($this->qb->getParameters());
+
+            return $query->execute();
+        } else {
+            $stmt = $this->qb->execute();
+
+            if (!$stmt instanceof Statement) {
+                throw new UnexpectedTypeException($stmt, 'Doctrine\\DBAL\\Driver\\Statement');
+            }
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
+    }
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    /**
+     * {@inheritDoc}
+     */
+    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+
+        $resolver->setOptional(array(
+            'result_set_mapping',
+            'entity_manager',
+        ));
+
+        $resolver->setAllowedTypes(array(
+            'result_set_mapping' => 'Doctrine\\ORM\\Query\\ResultSetMapping',
+            'entity_manager'     => 'Doctrine\\ORM\\EntityManager',
+        ));
+
+        $resolver->setDefaults(array(
+            'is_native_query' => function (Options $options) {
+                return isset($options['result_set_mapping'], $options['entity_manager']);
+            }
+        ));
     }
 }

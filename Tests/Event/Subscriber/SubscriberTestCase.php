@@ -75,10 +75,18 @@ abstract class SubscriberTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getMockPagerEvent()
     {
-        return $this
+        $event = $this
             ->getMockBuilder('KG\\Bundle\\PagerBundle\\Event\\PagerEvent')
             ->disableOriginalConstructor()
             ->getMock()
         ;
+
+        $event
+            ->expects($this->any())
+            ->method('getOptions')
+            ->will($this->returnValue(array()))
+        ;
+
+        return $event;
     }
 }
