@@ -9,26 +9,30 @@
  * file that was distributed with this source code.
  */
 
-namespace KG\Bundle\PagerBundle\Result\Provider;
+namespace KG\Bundle\PagerBundle\Pager;
+
+use KG\Bundle\PagerBundle\Result\Provider\ArrayProvider;
 
 /**
+ * Pages arrays
+ *
  * @author Kristen Gilden <gilden@planet.ee>
  */
-class ArrayFactory implements FactoryInterface
+class ArrayPager extends Pager
 {
     /**
      * {@inheritDoc}
      */
-    public function supports($target, array $options = array())
+    public function supports($target)
     {
-       return is_array($target);
+        return is_array($target);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function get($target, array $options = array())
+    protected function getProvider($target, array $options)
     {
-       return new ArrayProvider($target, $options);
+        return new ArrayProvider($target, $options);
     }
 }

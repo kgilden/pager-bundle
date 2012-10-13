@@ -18,54 +18,55 @@ use KG\Bundle\PagerBundle\Pager\Pager;
  */
 class PagerTest extends \PHPUnit_Framework_TestCase
 {
+    const CLASS_PAGE     = 'KG\\Bundle\\PagerBundle\\Result\\PageInterface';
+    const CLASS_PAGER    = 'KG\\Bundle\\PagerBundle\\Pager\\Pager';
+    const CLASS_PROVIDER = 'KG\\Bundle\\PagerBundle\\Result\\Provider\\ProviderInterface';
+
     /**
-     * @var Pager
+     * @var \PHPUnit_Framework_MockObject_MockObject|Pager
      */
     protected $pager;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $factory;
-
     protected function setUp()
     {
-        $this->factory = $this->getMock('KG\\Bundle\\PagerBundle\\Result\\Provider\\FactoryInterface');
-        $this->pager   = new Pager(array($this->factory));
+        $this->pager = $this->getMockForAbstractClass(self::CLASS_PAGER);
     }
 
     protected function tearDown()
     {
         unset($this->pager);
-        unset($this->factory);
     }
 
     /**
-     * @expectedException KG\Bundle\PagerBundle\Exception\ProviderNotFoundException
+     * @expectedException KG\Bundle\PagerBundle\Exception\TargetNotSupportedException
      */
-    public function testPaginateFactoryMissingThrowsException()
+    public function testPaginateThrowsTargetNotSupportedException()
     {
+        $this->pager
+            ->expects($this->once())
+            ->method('supports')
+            ->will($this->returnValue(false))
+        ;
+
         $this->pager->paginate('foo');
     }
 
     public function testPaginateReturnsPage()
     {
-        $this->factory
+        $this->pager
             ->expects($this->once())
             ->method('supports')
             ->will($this->returnValue(true))
         ;
 
-        $provider = $this->getMock('KG\\Bundle\\PagerBundle\\Result\\Provider\\ProviderInterface');
-
-        $this->factory
+        $this->pager
             ->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue($provider))
+            ->method('getProvider')
+            ->will($this->returnValue($this->getMock(self::CLASS_PROVIDER)))
         ;
 
         $page = $this->pager->paginate('foo');
 
-        $this->assertInstanceOf('KG\Bundle\PagerBundle\Result\PageInterface', $page);
+        $this->assertInstanceOf(self::CLASS_PAGE, $page);
     }
 }

@@ -25,4 +25,13 @@ interface PagerInterface
      * @return Collection
      */
     function paginate($target, array $options = array());
+
+    /**
+     * Returns whether the pager is able to paginate the specified target.
+     *
+     * @param mixed $target
+     *
+     * @return boolean
+     */
+    function supports($target);
 }

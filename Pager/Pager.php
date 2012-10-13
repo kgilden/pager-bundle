@@ -11,57 +11,35 @@
 
 namespace KG\Bundle\PagerBundle\Pager;
 
-use KG\Bundle\PagerBundle\Exception\ProviderNotFoundException;
+use KG\Bundle\PagerBundle\Exception\TargetNotSupportedException;
 use KG\Bundle\PagerBundle\Result\LazyPage;
 
 /**
- * Uses event dispatching to create a paged result
+ * Common implementation across all pagers.
  *
  * @author Kristen Gilden <gilden@planet.ee>
  */
-class Pager implements PagerInterface
+abstract class Pager implements PagerInterface
 {
-    /**
-     * @var array
-     */
-    protected $factories;
-
-    /**
-     * @param array $factories
-     */
-    public function __construct(array $factories)
-    {
-        $this->factories = $factories;
-    }
-
     /**
      * {@inheritDoc}
      */
     public function paginate($target, array $options = array())
     {
-        if (!$factory = $this->findFactory($target)) {
-            throw new ProviderNotFoundException($target);
+        if (!$this->supports($target)) {
+            throw new TargetNotSupportedException();
         }
 
-        return new LazyPage($factory->get($target, $options));
+        return new LazyPage($this->getProvider($target, $options));
     }
 
     /**
-     * Finds a factory capable of creating result providers for the
-     * specific query target.
+     * Gets a provider for the specified target.
      *
      * @param mixed $target
+     * @param array $options
      *
-     * @return KG\Bundle\PagerBundle\Result\
+     * @return ProviderInterface
      */
-    protected function findFactory($target)
-    {
-        foreach ($this->factories as $factory) {
-            if ($factory->supports($target)) {
-                return $factory;
-            }
-        }
-
-        return null;
-    }
+    abstract protected function getProvider($target, array $options);
 }
