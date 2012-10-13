@@ -11,11 +11,8 @@
 
 namespace KG\Bundle\PagerBundle\Pager;
 
-use KG\Bundle\PagerBundle\Event\PagerEvent;
 use KG\Bundle\PagerBundle\Exception\ProviderNotFoundException;
-use KG\Bundle\PagerBundle\PagerEvents;
 use KG\Bundle\PagerBundle\Result\LazyPage;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Uses event dispatching to create a paged result
@@ -25,16 +22,16 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class Pager implements PagerInterface
 {
     /**
-     * @var EventDispatcherInterface
+     * @var array
      */
-    protected $dispatcher;
+    protected $factories;
 
     /**
-     * @param EventDispatcherInterface $dispatcher
+     * @param array $factories
      */
-    public function __construct(EventDispatcherInterface $dispatcher)
+    public function __construct(array $factories)
     {
-        $this->dispatcher = $dispatcher;
+        $this->factories = $factories;
     }
 
     /**
@@ -42,16 +39,29 @@ class Pager implements PagerInterface
      */
     public function paginate($target, array $options = array())
     {
-        $event = new PagerEvent($target, $options);
-
-        $this->dispatcher->dispatch(PagerEvents::PAGINATE, $event);
-
-        if (true !== $event->isPropagationStopped()) {
+        if (!$factory = $this->findFactory($target)) {
             throw new ProviderNotFoundException($target);
         }
 
-        $page = new LazyPage($event->getProvider());
+        return new LazyPage($factory->get($target, $options));
+    }
 
-        return $page;
+    /**
+     * Finds a factory capable of creating result providers for the
+     * specific query target.
+     *
+     * @param mixed $target
+     *
+     * @return KG\Bundle\PagerBundle\Result\
+     */
+    protected function findFactory($target)
+    {
+        foreach ($this->factories as $factory) {
+            if ($factory->supports($target)) {
+                return $factory;
+            }
+        }
+
+        return null;
     }
 }

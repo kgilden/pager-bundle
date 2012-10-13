@@ -11,9 +11,8 @@
 
 namespace KG\Bundle\PagerBundle\Tests\Integration;
 
-use KG\Bundle\PagerBundle\Event\Subscriber\ArraySubscriber;
 use KG\Bundle\PagerBundle\Pager\Pager;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use KG\Bundle\PagerBundle\Result\Provider\ArrayFactory;
 
 /**
  * @author Kristen Gilden <gilden@planet.ee>
@@ -36,9 +35,8 @@ class ArrayPageTest extends \PHPUnit_Framework_TestCase
 
     protected function makePager()
     {
-        $dispatcher = new EventDispatcher();
-        $dispatcher->addSubscriber(new ArraySubscriber());
+        $factory = new ArrayFactory();
 
-        return new Pager($dispatcher);
+        return new Pager(array($factory));
     }
 }

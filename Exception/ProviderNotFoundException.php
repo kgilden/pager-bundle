@@ -11,6 +11,11 @@
 
 namespace KG\Bundle\PagerBundle\Exception;
 
+/**
+ * Gets thrown when a result provider is not found.
+ *
+ * @author Kristen Gilden <gilden@planet.ee>
+ */
 class ProviderNotFoundException extends KGPagerException
 {
     public function __construct($target)

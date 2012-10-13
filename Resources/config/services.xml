@@ -7,15 +7,15 @@
     <parameters>
         
         <parameter key="kg_pager.class">KG\Bundle\PagerBundle\Pager\Pager</parameter>
+        <parameter key="kg_pager.factory.generic.class">KG\Bundle\PagerBundle\Result\Provider\GenericFactory</parameter>
+        <parameter key="kg_pager.interface.provider">KG\Bundle\PagerBundle\Result\Provider\ProviderInterface</parameter>
         
     </parameters>
     
     <services>
         
         <!-- Main paging service -->
-        <service id="kg_pager" class="%kg_pager.class%">
-            <argument type="service" id="event_dispatcher" />
-        </service>
+        <service id="kg_pager" class="%kg_pager.class%" />
         
     </services>
 </container>

@@ -20,6 +20,11 @@ use Doctrine\ORM\Query;
  * Note that this only works if your entity has only one identifier field
  * (composite keys won’t work).
  *
+ * You should be very careful with trying to page queries with a GROUP BY
+ * clause: as the counting query replaces select expressions which could
+ * potentially cause the query to return several rows instead of a single one.
+ * Consider manually setting the count query to be 100% sure instead.
+ *
  * @author Kristen Gilden <gilden@planet.ee>
  */
 class DQLProvider implements ProviderInterface
