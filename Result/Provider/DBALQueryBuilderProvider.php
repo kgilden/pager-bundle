@@ -53,12 +53,30 @@ class DBALQueryBuilderProvider extends OptionsAware implements ProviderInterface
     public function getElementCount()
     {
         if (!isset($this->elementCount)) {
-            // The count query is constructed by cloning the query builder
-            // and replacing the select expression. Careful, Innodb is
-            // notoriously slow with this method
 
             $qb = clone $this->qb;
             $qb->select('COUNT(*)');
+
+            if (count($qb->getParameters()) > 0) {
+                // Its a bit more complicated with parametrized queries. The
+                // query must be built by wrapping a select query around
+                // the target query. This allows to use parameters even in
+                // the select expression.
+
+                // Not resetting select as this is already changed.
+                $qb->resetQueryParts(array(
+                    'from',
+                    'join',
+                    'set',
+                    'where',
+                    'groupBy',
+                    'having',
+                    'orderBy',
+                ));
+
+                $subQuery = sprintf('(%s)', $this->qb->getSQL());
+                $qb->from($subQuery, 'kg_pager_count_table');
+            }
 
             $stmt = $qb->execute();
 
