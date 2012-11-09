@@ -61,6 +61,7 @@ class CountSQLWalker extends TreeWalkerAdapter
         );
 
         // ordering does not matter for the count query
+        $AST->groupByClause = null;
         $AST->orderByClause = null;
     }
 }
