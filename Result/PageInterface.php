@@ -67,4 +67,33 @@ interface PageInterface extends ArrayAccess, Countable, IteratorAggregate
      * @return array
      */
     function all();
+
+    /**
+     * Adds a callback function to modify each result separately. The callback
+     * is called for each element separately. It is expected to return the
+     * modified element. Callbacks are applied in a FIFO fashion.
+     *
+     * Element callbacks must be run after page callbacks.
+     *
+     * @param mixed $cb
+     *
+     * @return PageInterface
+     */
+    function addElementCb($cb);
+
+    /**
+     * Adds a callback function to modify the results before returning
+     * them by any of the other methods. The whole result set is passed
+     * to the callback.
+     *
+     * The callback is expected to return the modified result set. Callbacks
+     * are applied in a FIFO fashion.
+     *
+     * Page callbacks must be run before element callbacks.
+     *
+     * @param mixed $cb
+     *
+     * @return PageInterface
+    */
+    function addPageCb($cb);
 }

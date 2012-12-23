@@ -15,88 +15,162 @@ use KG\Bundle\PagerBundle\Result\AbstractPage;
 
 class AbstractPageTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAssignment()
+    /**
+     * @expectedException KG\Bundle\PagerBundle\Exception\IllegalMethodException
+     */
+    public function testAssignmentThrowsException()
     {
         $page = $this->getAbstractPage();
         $page[0] = 'foo';
-
-        $this->assertEquals('foo', $page[0]);
-
-        return $page;
     }
 
     /**
-     * @depends testAssignment
+     * @expectedException KG\Bundle\PagerBundle\Exception\IllegalMethodException
      */
-    public function testAll(AbstractPage $page)
+    public function testUnsettingThrowsException()
     {
-        $this->assertEquals(array('foo'), $page->all());
+        $page = $this->getAbstractPage(array('foo'));
+        unset($page[0]);
     }
 
-    public function testEmptyOffsetAppendsElement()
+    public function testOffsetGetReturnsNull()
     {
-        $page = $this->getAbstractPage();
-        $page[]  = 'bar';
-
-        $this->assertEquals('bar', $page[0]);
+        $page = $this->getAbstractPage(array());
+        $this->assertNull($page[0]);
     }
 
-    /**
-     * @depends testAssignment
-     */
-    public function testOffsetIsset(AbstractPage $page)
+    public function testAll()
     {
+        $expected = array('foo');
+        $page     = $this->getAbstractPage($expected);
+
+        $this->assertEquals($expected, $page->all());
+    }
+
+    public function testOffsetIsset()
+    {
+        $page = $this->getAbstractPage(array('foo'));
         $this->assertTrue(isset($page[0]));
     }
 
-    /**
-     * @depends testAssignment
-     */
-    public function testOffsetNotSet(AbstractPage $page)
+    public function testOffsetNotSet()
     {
+        $page = $this->getAbstractPage(array('foo'));
         $this->assertFalse(isset($page[1]));
     }
 
-    /**
-     * @depends testAssignment
-     */
-    public function testCount(AbstractPage $page)
+    public function testCount()
     {
-        $page[1] = 'bar';
-
+        $page = $this->getAbstractPage(array('foo', 'bar'));
         $this->assertEquals(2, $page->count());
     }
 
-    /**
-     * @depends testAssignment
-     */
-    public function testOffsetUnset(AbstractPage $page)
+    public function testOlderCbsInvokedBeforeNewer()
     {
-        unset($page[1]);
+        $invoked = false;
+        $test    = $this;
 
-        $this->assertFalse(isset($page[1]));
+        $funA = function (array $elements) use (&$invoked) {
+            $invoked = true;
+
+            return $elements;
+        };
+
+        $funB = function (array $elements) use (&$invoked, $test) {
+            $test->assertTrue($invoked);
+
+            return $elements;
+        };
+
+        $page = $this->getAbstractPage(array('foo', 'bar'));
+        $page->addPageCb($funA);
+        $page->addPageCb($funB);
+
+        $page[0];
+    }
+
+    public function testElementCbAppliedPerElement()
+    {
+        $runCount = 0;
+
+        $page = $this->getAbstractPage(array('foo', 'bar'));
+        $page->addElementCb(function ($elements) use (&$runCount) {
+            $runCount++;
+
+            return $elements;
+        });
+
+        $page[0];
+
+        $this->assertEquals(2, $runCount);
+    }
+
+    public function testPageCbAppliedOnce()
+    {
+        $runCount = 0;
+
+        $page = $this->getAbstractPage(array('foo', 'bar'));
+        $page->addPageCb(function (array $elements) use (&$runCount) {
+            $runCount++;
+
+            return $elements;
+        });
+
+        $page[0];
+        $page[1];
+
+        $this->assertEquals(1, $runCount);
     }
 
     /**
-     * @depends testEmptyOffsetAppendsElement
+     * @expectedException \UnexpectedValueException
      */
-    public function testIterator()
+    public function testInvalidCbNotReturnsArrayThrowsException()
     {
-        $expected = array('foo', 'bar');
+        $fun = function (array $elements) {
+            return null;
+        };
 
-        $page   = $this->getAbstractPage();
-        $page[] = 'foo';
-        $page[] = 'bar';
+        $page = $this->getAbstractPage(array('foo'));
+        $page->addPageCb($fun);
 
-        foreach ($page as $key => $val) {
-            $this->assertEquals($expected[$key], $val);
-        }
+        $page[0];
     }
 
-    public function getAbstractPage()
+    /**
+     * @expectedException KG\Bundle\PagerBundle\Exception\ElementsAccessedException
+     */
+    public function testAddElementCbAfterAccessThrowsException()
+    {
+        $page = $this->getAbstractPage(array('foo', 'bar'));
+        $page[0];
+
+        $page->addElementCb(function ($element) {
+            return $element;
+        });
+    }
+
+    /**
+     * @expectedException KG\Bundle\PagerBundle\Exception\ElementsAccessedException
+     */
+    public function testAddPageCbAfterAccesThrowsException()
+    {
+        $page = $this->getAbstractPage(array('foo', 'bar'));
+        $page[0];
+
+        $page->addPageCb(function (array $elements) {
+            return $elements;
+        });
+    }
+
+    /**
+     * @return AbstractPage|\PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getAbstractPage(array $elements = null)
     {
         return $this
             ->getMockBuilder('KG\\Bundle\\PagerBundle\\Result\\AbstractPage')
+            ->setConstructorArgs(array($elements))
             ->getMockForAbstractClass();
     }
 }
