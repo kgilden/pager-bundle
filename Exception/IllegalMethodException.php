@@ -23,7 +23,7 @@ class IllegalMethodException extends KGPagerException
         if (is_null($message)) {
             list(,$caller) = debug_backtrace(false);
 
-            $message = "Unexpected call to illegal method $caller.";
+            $message = "Unexpected call to illegal method \"$caller[function]\".";
         }
 
         parent::__construct($message, $code, $previous);
