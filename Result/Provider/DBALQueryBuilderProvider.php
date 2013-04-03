@@ -57,12 +57,7 @@ class DBALQueryBuilderProvider extends OptionsAware implements ProviderInterface
             $qb = clone $this->qb;
             $qb->select('COUNT(*)');
 
-            if (count($qb->getParameters()) > 0) {
-                // Its a bit more complicated with parametrized queries. The
-                // query must be built by wrapping a select query around
-                // the target query. This allows to use parameters even in
-                // the select expression.
-
+            if ($this->isComplexQuery($qb)) {
                 // Not resetting select as this is already changed.
                 $qb->resetQueryParts(array(
                     'from',
@@ -140,5 +135,32 @@ class DBALQueryBuilderProvider extends OptionsAware implements ProviderInterface
                 return isset($options['result_set_mapping'], $options['entity_manager']);
             }
         ));
+    }
+
+    /**
+     * Checks whether the query is too complex for simple SQL part
+     * substitution.
+     *
+     * The query is considered complex if any of the following statements
+     * is true:
+     *
+     *  - it has parameters;
+     *  - it is an aggregate query;
+     *
+     * @param QueryBuilder $qb
+     *
+     * @return boolean
+     */
+    private function isComplexQuery(QueryBuilder $qb)
+    {
+        if (count($qb->getParameters()) > 0) {
+            return true;
+        }
+
+        if (count($qb->getQueryPart('groupBy')) > 0) {
+            return true;
+        }
+
+        return false;
     }
 }
