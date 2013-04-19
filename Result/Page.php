@@ -46,13 +46,25 @@ class Page extends AbstractPage
      */
     public function setElementCount($elementCount)
     {
-        if ($elementCount < 0) {
+        if (0 > ($elementCount = (int) $elementCount)) {
             throw new \LogicException('Invalid negative element count');
         }
 
         $this->elementCount = $elementCount;
 
         return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getElementCount()
+    {
+        if (!isset($this->elementCount)) {
+            throw new \RuntimeException('Element count is not set');
+        }
+
+        return $this->elementCount;
     }
 
     /**
@@ -67,6 +79,17 @@ class Page extends AbstractPage
         $this->elementsPerPage = $elementsPerPage;
 
         return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getOffset()
+    {
+        $elementsPerPage = $this->getElementsPerPage();
+        $currentPage     = $this->getCurrentPage();
+
+        return ($currentPage - 1) * $elementsPerPage;
     }
 
     /**
@@ -132,21 +155,6 @@ class Page extends AbstractPage
     public function isLast()
     {
         return $this->getPageCount() === $this->getCurrentPage();
-    }
-
-    /**
-     * Gets the total number of elements paged.
-     *
-     * @return integer
-     */
-    protected function getElementCount()
-    {
-        if (!isset($this->elementCount)) {
-            // Most likely caused by a bug.
-            throw new \RuntimeException('Element count must be set before retrieving the page count');
-        }
-
-        return $this->elementCount;
     }
 
     /**

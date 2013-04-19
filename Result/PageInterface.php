@@ -26,9 +26,23 @@ interface PageInterface extends ArrayAccess, Countable, IteratorAggregate
     function setElementCount($elementCount);
 
     /**
+     * Gets the total number of elements paged.
+     *
+     * @return integer
+     */
+    function getElementCount();
+
+    /**
      * @param integer $elementsPerPage
      */
     function setElementsPerPage($elementsPerPage);
+
+    /**
+     * Gets the offset from the first element as if the elements were not paged.
+     *
+     * @return integer
+     */
+    function getOffset();
 
     /**
      * Gets the total number of pages.

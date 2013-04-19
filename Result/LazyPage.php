@@ -56,6 +56,37 @@ final class LazyPage extends Page
     /**
      * {@inheritDoc}
      */
+    public function getElementCount()
+    {
+        if (!isset($this->elementCount)) {
+            $this->setElementCount($this->provider->getElementCount());
+        }
+
+        return parent::getElementCount();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCurrentPage($currentPage)
+    {
+        try {
+            $currentPageOld = $this->getCurrentPage();
+        } catch (\RuntimeException $e) {
+            $currentPageOld = null;
+        }
+
+        if ($currentPageOld !== $currentPage) {
+            // Repopulate the elements, if the current page has been changed.
+            $this->elementsPopulated = false;
+        }
+
+        parent::setCurrentPage($currentPage);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function offsetExists($index)
     {
         $this->populateElements();
@@ -124,18 +155,6 @@ final class LazyPage extends Page
     }
 
     /**
-     * {@inheritDoc}
-     */
-    protected function getElementCount()
-    {
-        if (!isset($this->elementCount)) {
-            $this->setElementCount($this->provider->getElementCount());
-        }
-
-        return parent::getElementCount();
-    }
-
-    /**
      * Loads the elements from the provider
      */
     private function populateElements()
@@ -144,11 +163,10 @@ final class LazyPage extends Page
             return;
         }
 
-        $elementsPerPage = $this->getElementsPerPage();
-        $currentPage     = $this->getCurrentPage();
-        $offset          = ($currentPage - 1) * $elementsPerPage;
-
-        $elements = $this->provider->getElements($offset, $elementsPerPage);
+        $elements = $this->provider->getElements(
+            $this->getOffset(),
+            $this->getElementsPerPage()
+        );
 
         if (!is_array($elements)) {
             throw new UnexpectedTypeException($elements, 'array');

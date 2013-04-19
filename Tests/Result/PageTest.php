@@ -34,6 +34,31 @@ class PageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider positiveIntegerProvider
+     */
+    public function testGetElementCount($elementCount)
+    {
+        $page = new Page();
+        $page->setElementCount($elementCount);
+
+        $this->assertSame((int) $elementCount, $page->getElementCount());
+    }
+
+    public function positiveIntegerProvider()
+    {
+        return array(array(1), array(10), array('1'), array('1.0'));
+    }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testGetElementCountThrowsExcetionIfNotSet()
+    {
+        $page = new Page();
+        $page->getElementCount();
+    }
+
+    /**
      * @dataProvider nonPositiveIntegerProvider
      * @expectedException LogicException
      */
@@ -125,5 +150,16 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $page->setCurrentPage(2);
 
         $this->assertTrue(!$page->isFirst() && !$page->isLast());
+    }
+
+    public function testGetOffsetReturnsOffsetFromBeginning()
+    {
+        $page = new Page();
+        $page->setElementCount(10);
+        $page->setElementsPerPage(2);
+
+        $page->setCurrentPage(3);
+
+        $this->assertEquals(4, $page->getOffset());
     }
 }

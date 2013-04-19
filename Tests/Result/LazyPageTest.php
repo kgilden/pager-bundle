@@ -63,6 +63,39 @@ class LazyPageTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testCurrentPageChangeLoadsNewElements()
+    {
+        $provider = $this->getMockProvider();
+        $page     = new LazyPage($provider);
+
+        $provider
+            ->expects($this->at(1))
+            ->method('getElements')
+            ->will($this->returnValue(array('foo')))
+        ;
+
+        $provider
+            ->expects($this->at(2))
+            ->method('getElements')
+            ->will($this->returnValue(array('bar')))
+        ;
+
+        $provider
+            ->expects($this->once())
+            ->method('getElementCount')
+            ->will($this->returnValue(30))
+        ;
+
+        $page->setElementsPerPage(1);
+        $page->setCurrentPage(3);
+
+        $this->assertEquals('foo', $page[0]);
+
+        $page->setCurrentPage(4);
+
+        $this->assertEquals('bar', $page[0], 'LazyPager should get a new page');
+    }
+
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
