@@ -175,6 +175,7 @@ abstract class AbstractPage implements PageInterface
         // methods. You should keep this in mind and follow the same
         // principle when extending from this class.
         $this->_elements = $elements;
+        $this->cbsApplied = false;
     }
 
     /**

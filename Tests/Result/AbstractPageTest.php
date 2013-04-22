@@ -164,6 +164,28 @@ class AbstractPageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Although AbstractPage uses the protected setter in the constructor,
+     * overriding classes might use it multiple times. That's why the test is
+     * deviating from unit testing best practises and uses reflection.
+     */
+    public function testSetNewElementsReappliesCallbacks()
+    {
+        $page = $this->getAbstractPage();
+        $page->addElementCb(function($element) {
+            return 'baz';
+        });
+
+        $setter = new \ReflectionMethod($page, 'set');
+        $setter->setAccessible(true);
+
+        $setter->invoke($page, array('foo'));
+        $page[0]; // Access an element to trigger initial callback execution.
+
+        $setter->invoke($page, array('bar'));
+        $this->assertEquals('baz', $page[0]);
+    }
+
+    /**
      * @return AbstractPage|\PHPUnit_Framework_MockObject_MockObject
      */
     public function getAbstractPage(array $elements = null)
