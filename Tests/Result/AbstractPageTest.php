@@ -67,26 +67,42 @@ class AbstractPageTest extends \PHPUnit_Framework_TestCase
 
     public function testOlderCbsInvokedBeforeNewer()
     {
-        $invoked = false;
-        $test    = $this;
+        $test = $this;
 
-        $funA = function (array $elements) use (&$invoked) {
-            $invoked = true;
+        // 1. Append '1' to each element.
+        $funA = function (array $elements) {
+            foreach ($elements as $key => $element) {
+                $elements[$key] .= '1';
+            }
 
             return $elements;
         };
 
-        $funB = function (array $elements) use (&$invoked, $test) {
-            $test->assertTrue($invoked);
+        // 2. Append '2' to each element.
+        $funB = function ($element) {
+            $element .= '2';
+
+            return $element;
+        };
+
+        // 3. Append '3' to each element.
+        $funC = function (array $elements) {
+            foreach ($elements as $key => $element) {
+                $elements[$key] .= '3';
+            }
 
             return $elements;
         };
 
         $page = $this->getAbstractPage(array('foo', 'bar'));
         $page->addPageCb($funA);
-        $page->addPageCb($funB);
+        $page->addElementCb($funB);
+        $page->addPageCb($funC);
 
-        $page[0];
+        $this->assertEquals(
+            array('foo123', 'bar123'),
+            array($page[0], $page[1])
+        );
     }
 
     public function testElementCbAppliedPerElement()
@@ -123,7 +139,7 @@ class AbstractPageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
+     * @expectedException KG\Bundle\PagerBundle\Exception\UnexpectedTypeException
      */
     public function testInvalidCbNotReturnsArrayThrowsException()
     {

@@ -11,10 +11,12 @@
 
 namespace KG\Bundle\PagerBundle\Result;
 
-use KG\Bundle\PagerBundle\Exception\ElementsAccessedException;
+use KG\Bundle\PagerBundle\Result\Helper\ElementCallback;
 
 use ArrayIterator;
+use KG\Bundle\PagerBundle\Exception\ElementsAccessedException;
 use KG\Bundle\PagerBundle\Exception\IllegalMethodException;
+use KG\Bundle\PagerBundle\Result\Helper\PageCallback;
 
 /**
  * Implements the array part of the PagerInterface.
@@ -41,6 +43,11 @@ abstract class AbstractPage implements PageInterface
      * @var boolean
      */
     private $accessed = false;
+
+    /**
+     * @var CallbackInterface[]
+     */
+    private $callbacks = array();
 
     /**
      * @var array
@@ -148,7 +155,7 @@ abstract class AbstractPage implements PageInterface
             throw new ElementsAccessedException($message);
         }
 
-        $this->pageCbs[] = $cb;
+        $this->callbacks[] = new PageCallback($cb);
     }
 
     /**
@@ -161,7 +168,7 @@ abstract class AbstractPage implements PageInterface
             throw new ElementsAccessedException($message);
         }
 
-        $this->elementCbs[] = $cb;
+        $this->callbacks[] = new ElementCallback($cb);
     }
 
     /**
@@ -189,22 +196,29 @@ abstract class AbstractPage implements PageInterface
 
         $elements = $this->_elements;
 
-        foreach ($this->pageCbs as $pageCb) {
-            $elements = call_user_func($pageCb, $elements);
-
-            if (!is_array($elements)) {
-                $message = "Page callbacks must return an array";
-                throw new \UnexpectedValueException($message);
-            }
-        }
-
-        foreach ($this->elementCbs as $elementCb) {
-            foreach ($elements as $key => $element) {
-                $elements[$key] = call_user_func($elementCb, $element);
-            }
+        foreach ($this->callbacks as $callback) {
+            $elements = $callback->apply($elements);
         }
 
         $this->_elements  = $elements;
         $this->cbsApplied = true;
+
+//         foreach ($this->pageCbs as $pageCb) {
+//             $elements = call_user_func($pageCb, $elements);
+
+//             if (!is_array($elements)) {
+//                 $message = "Page callbacks must return an array";
+//                 throw new \UnexpectedValueException($message);
+//             }
+//         }
+
+//         foreach ($this->elementCbs as $elementCb) {
+//             foreach ($elements as $key => $element) {
+//                 $elements[$key] = call_user_func($elementCb, $element);
+//             }
+//         }
+
+//         $this->_elements  = $elements;
+//         $this->cbsApplied = true;
     }
 }
