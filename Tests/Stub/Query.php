@@ -38,7 +38,7 @@ class Query extends AbstractQuery
     /**
      * {@inheritDoc}
      */
-    public function execute(array $params = array(), $hydrationMode = null)
+    public function execute($parameters = null, $hydrationMode = null)
     {
         return $this->return_value;
     }
