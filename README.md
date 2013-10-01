@@ -19,32 +19,34 @@ Usage
 Let's say a bunch of Doctrine entities are required to be paged. Simply inject
 the generic pager inside a custom repository.
 
-    <?php
-    namespace Acme\Bundle\DemoBundle\Repository;
+```php
+<?php
+namespace Acme\Bundle\DemoBundle\Repository;
 
-    use Doctrine\ORM\EntityRepository;
-    use KG\Bundle\PagerBundle\Pager\PagerInterface;
+use Doctrine\ORM\EntityRepository;
+use KG\Bundle\PagerBundle\Pager\PagerInterface;
 
-    class FooRepository extends EntityRepository
+class FooRepository extends EntityRepository
+{
+    public function setPager(PagerInterface $pager)
     {
-        public function setPager(PagerInterface $pager)
-        {
-            $this->pager = $pager;
-        }
-
-        /**
-         * Finds all `foo` elements and pages them. This is obviously a very
-         * simple use case for the sake of brevity.
-         *
-         * @return KG\Bundle\PagerBundle\Result\PageInterface
-         */
-        public function findAllPaged()
-        {
-            $qb = $this->createQueryBuilder('foo');
-
-            return $this->pager->paginate($qb);
-        }
+        $this->pager = $pager;
     }
+
+    /**
+     * Finds all `foo` elements and pages them. This is obviously a very
+     * simple use case for the sake of brevity.
+     *
+     * @return KG\Bundle\PagerBundle\Result\PageInterface
+     */
+    public function findAllPaged()
+    {
+        $qb = $this->createQueryBuilder('foo');
+
+        return $this->pager->paginate($qb);
+    }
+}
+```
 
 The returned `PageInterface` object is at this point not yet populated with
 the elements. For this to actually happen, the page needs two more pieces
@@ -52,24 +54,26 @@ of information: the current page and the amount of elements to be displayed
 per page. The corresponding controller action would probably look something
 along the lines of the following:
 
-    <?php
-    // src/Acme/Bundle/AcmeDemoBundle/Controller/FooController.php
+```php
+<?php
+// src/Acme/Bundle/AcmeDemoBundle/Controller/FooController.php
 
-    public function listFoosAction()
-    {
-        // `$foos` can be iterated over like any other array
-        $foos = $this
-            ->get('doctrine')
-            ->getRepository('AcmeDemoBundle:Foo')
-            ->findAllPaged()
-        ;
-        $foos->setElementsPerPage(25);
-        $foos->setCurrentPage(2);
+public function listFoosAction()
+{
+    // `$foos` can be iterated over like any other array
+    $foos = $this
+        ->get('doctrine')
+        ->getRepository('AcmeDemoBundle:Foo')
+        ->findAllPaged()
+    ;
+    $foos->setElementsPerPage(25);
+    $foos->setCurrentPage(2);
 
-        return $this->render('AcmeDemoBundle:Foo:list.html', array(
-            'foos' => $foos,
-        ));
-    }
+    return $this->render('AcmeDemoBundle:Foo:list.html', array(
+        'foos' => $foos,
+    ));
+}
+```
 
 As seen from the previous example, you can decide for yourself when exactly
 is it the right time to set the current page and elements per page. It's
@@ -80,11 +84,13 @@ Installation
 
 Add KGPagerBundle in your `composer.json`:
 
-    {
-        "require": {
-            "kgilden/pager-bundle": "~1.0"
-        }
+```json
+{
+    "require": {
+        "kgilden/pager-bundle": "~1.0"
     }
+}
+```
 
 Update the dependencies:
 
@@ -92,16 +98,18 @@ Update the dependencies:
 
 Finally enable the bundle by appending it to `app/AppKernel.php`:
 
-    <?php
-    // app/AppKernel.php
+```php
+<?php
+// app/AppKernel.php
 
-    public function registerBundles()
-    {
-        $bundles = array(
-            // ...
-            new KG\Bundle\PagerBundle\KGPagerBundle(),
-        );
-    }
+public function registerBundles()
+{
+    $bundles = array(
+        // ...
+        new KG\Bundle\PagerBundle\KGPagerBundle(),
+    );
+}
+```
 
 Contributing
 ------------
