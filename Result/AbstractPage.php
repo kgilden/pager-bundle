@@ -202,23 +202,5 @@ abstract class AbstractPage implements PageInterface
 
         $this->_elements  = $elements;
         $this->cbsApplied = true;
-
-//         foreach ($this->pageCbs as $pageCb) {
-//             $elements = call_user_func($pageCb, $elements);
-
-//             if (!is_array($elements)) {
-//                 $message = "Page callbacks must return an array";
-//                 throw new \UnexpectedValueException($message);
-//             }
-//         }
-
-//         foreach ($this->elementCbs as $elementCb) {
-//             foreach ($elements as $key => $element) {
-//                 $elements[$key] = call_user_func($elementCb, $element);
-//             }
-//         }
-
-//         $this->_elements  = $elements;
-//         $this->cbsApplied = true;
     }
 }
