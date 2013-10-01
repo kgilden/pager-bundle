@@ -1,7 +1,6 @@
 {
     "name": "kgilden/pager-bundle",
     "type": "symfony-bundle",
-    "version": "dev-master",
     "description": "Symfony KGPagerBundle",
     "keywords": ["pagination"],
     "license": "MIT",
