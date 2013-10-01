@@ -23,6 +23,8 @@ interface PagerInterface
      * @param array $options    Paging specific options.
      *
      * @return Collection
+     *
+     * @api
      */
     function paginate($target, array $options = array());
 
@@ -32,6 +34,8 @@ interface PagerInterface
      * @param mixed $target
      *
      * @return boolean
+     *
+     * @api
      */
     function supports($target);
 }
