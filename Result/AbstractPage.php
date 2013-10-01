@@ -11,11 +11,10 @@
 
 namespace KG\Bundle\PagerBundle\Result;
 
-use KG\Bundle\PagerBundle\Result\Helper\ElementCallback;
-
 use ArrayIterator;
 use KG\Bundle\PagerBundle\Exception\ElementsAccessedException;
 use KG\Bundle\PagerBundle\Exception\IllegalMethodException;
+use KG\Bundle\PagerBundle\Result\Helper\ElementCallback;
 use KG\Bundle\PagerBundle\Result\Helper\PageCallback;
 
 /**
