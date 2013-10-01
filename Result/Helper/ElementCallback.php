@@ -3,7 +3,7 @@
 /*
  * This file is part of the KGPagerBundle package.
  *
- * (c) Kristen Gilden gilden@planet.ee
+ * (c) Kristen Gilden kristen.gilden@gmail.com
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@ namespace KG\Bundle\PagerBundle\Result\Helper;
  * Applies element callbacks. The callback is invoked once per each element.
  * The modified element is expected to be output.
  *
- * @author Kristen Gilden <gilden@planet.ee>
+ * @author Kristen Gilden <kristen.gilden@gmail.com>
  */
 class ElementCallback implements CallbackInterface
 {

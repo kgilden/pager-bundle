@@ -3,7 +3,7 @@
 /*
  * This file is part of the KGPagerBundle package.
  *
- * (c) Kristen Gilden gilden@planet.ee
+ * (c) Kristen Gilden kristen.gilden@gmail.com
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@ namespace KG\Bundle\PagerBundle\Result\Helper;
  * applied to Page objects. At the moment this is just an implementation detail
  * and should not be used by userland code.
  *
- * @author Kristen Gilden <gilden@planet.ee>
+ * @author Kristen Gilden <kristen.gilden@gmail.com>
  */
 interface CallbackInterface
 {

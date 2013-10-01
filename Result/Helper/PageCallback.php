@@ -3,7 +3,7 @@
 /*
  * This file is part of the KGPagerBundle package.
  *
- * (c) Kristen Gilden gilden@planet.ee
+ * (c) Kristen Gilden kristen.gilden@gmail.com
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@ use KG\Bundle\PagerBundle\Exception\UnexpectedTypeException;
  * Applies page callbacks. The array of elements is passed down to the
  * callback and the transformed element array is expected to be output.
  *
- * @author Kristen Gilden <gilden@planet.ee>
+ * @author Kristen Gilden <kristen.gilden@gmail.com>
  */
 class PageCallback implements CallbackInterface
 {

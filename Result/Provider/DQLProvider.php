@@ -3,7 +3,7 @@
 /*
  * This file is part of the KGPagerBundle package.
  *
- * (c) Kristen Gilden gilden@planet.ee
+ * (c) Kristen Gilden kristen.gilden@gmail.com
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -25,7 +25,7 @@ use Doctrine\ORM\Query;
  * potentially cause the query to return several rows instead of a single one.
  * Consider manually setting the count query to be 100% sure instead.
  *
- * @author Kristen Gilden <gilden@planet.ee>
+ * @author Kristen Gilden <kristen.gilden@gmail.com>
  */
 class DQLProvider implements ProviderInterface
 {
