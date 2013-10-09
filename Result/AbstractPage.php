@@ -37,26 +37,9 @@ abstract class AbstractPage implements PageInterface
     private $cbsApplied = false;
 
     /**
-     * Have any of the elements already been accessed?
-     *
-     * @var boolean
-     */
-    private $accessed = false;
-
-    /**
      * @var CallbackInterface[]
      */
     private $callbacks = array();
-
-    /**
-     * @var array
-     */
-    private $elementCbs = array();
-
-    /**
-     * @var array
-     */
-    private $pageCbs = array();
 
     /**
      * @param array|null $elements

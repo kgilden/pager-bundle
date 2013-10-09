@@ -15,8 +15,6 @@ use KG\Bundle\PagerBundle\Exception\UnexpectedTypeException;
 use KG\Bundle\PagerBundle\Options\OptionsAware;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Query\ResultSetMapping;
 use PDO;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
