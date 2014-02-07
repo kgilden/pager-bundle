@@ -13,8 +13,6 @@ namespace KG\Bundle\PagerBundle\Tests\Pager;
 
 use KG\Bundle\PagerBundle\Pager\GenericPager;
 
-use KG\Bundle\PagerBundle\Result\Provider\GenericFactory;
-
 /**
  * @author Kristen Gilden <kristen.gilden@gmail.com>
  */

@@ -30,7 +30,7 @@ class PageCallbackTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(array($this, 'myCallback')),
-            array(function($elements) { return $elements; }),
+            array(function ($elements) { return $elements; }),
         );
     }
 

@@ -31,12 +31,12 @@ class GenericPager extends Pager
     protected $targetFQCN;
 
     /**
-     * @param string $providerFQCN  FQCN of the provider. Type checking is done
-     *                              in the compliation phase. If you're using
-     *                              this separately, make sure to pass a class
-     *                              name implementing ProviderInterface.
-     * @param string $targetFQCN    FQCN of the target that is supported by the
-     *                              $provider class.
+     * Type checking is done during the compilation phase. If you're using
+     * this separately, make sure to pass a class name implementing
+     * ProviderInterface.
+     *
+     * @param string $providerFQCN FQCN of the provider
+     * @param string $targetFQCN   FQCN of the target that is supported by the $provider class.
      */
     public function __construct($providerFQCN, $targetFQCN)
     {

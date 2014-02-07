@@ -18,7 +18,7 @@ namespace KG\Bundle\PagerBundle\Exception;
  */
 class TargetNotSupportedException extends \RuntimeException
 {
-	public function __construct($message = null, $code = null, $previous = null)
+    public function __construct($message = null, $code = null, $previous = null)
     {
         if (is_null($message)) {
             $message = 'This pager does not know how to page the target';

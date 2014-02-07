@@ -187,7 +187,7 @@ class AbstractPageTest extends \PHPUnit_Framework_TestCase
     public function testSetNewElementsReappliesCallbacks()
     {
         $page = $this->getAbstractPage();
-        $page->addElementCb(function($element) {
+        $page->addElementCb(function ($element) {
             return 'baz';
         });
 

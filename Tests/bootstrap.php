@@ -15,7 +15,7 @@ if (!is_file($autoloadFile = __DIR__.'/../vendor/autoload.php')) {
 
 require $autoloadFile;
 
-spl_autoload_register(function($class) {
+spl_autoload_register(function ($class) {
     if (0 === strpos($class, 'KG\\PagerBundle\\')) {
         $path = __DIR__.'/../'.implode('/', array_slice(explode('\\', $class), 2)).'.php';
         if (!stream_resolve_include_path($path)) {

@@ -21,7 +21,7 @@ interface ProviderInterface
     /**
      * @return integer
      */
-    function getElementCount();
+    public function getElementCount();
 
     /**
      * Gets the paged elements.
@@ -31,5 +31,5 @@ interface ProviderInterface
      *
      * @return array
      */
-    function getElements($offset, $count);
+    public function getElements($offset, $count);
 }

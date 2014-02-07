@@ -25,7 +25,7 @@ interface CallbackInterface
      *
      * @param array $elements
      *
-     * @return array  The elements with the current callback applied
+     * @return array The elements with the current callback applied
      */
-    function apply(array $elements);
+    public function apply(array $elements);
 }

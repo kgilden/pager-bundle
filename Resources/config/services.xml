@@ -3,9 +3,9 @@
 <container xmlns="http://symfony.com/schema/dic/services"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-    
+
     <parameters>
-        
+
         <parameter key="kg_pager.array.class">KG\Bundle\PagerBundle\Pager\ArrayPager</parameter>
         <parameter key="kg_pager.composite.class">KG\Bundle\PagerBundle\Pager\CompositePager</parameter>
         <parameter key="kg_pager.dql.provider.class">KG\Bundle\PagerBundle\Result\Provider\DQLProvider</parameter>
@@ -15,11 +15,11 @@
         <parameter key="kg_pager.qb.dbal.target.class">Doctrine\DBAL\Query\QueryBuilder</parameter>
         <parameter key="kg_pager.qb.orm.provider.class">KG\Bundle\PagerBundle\Result\Provider\ORMQueryBuilderProvider</parameter>
         <parameter key="kg_pager.qb.orm.target.class">Doctrine\ORM\QueryBuilder</parameter>
-        
+
     </parameters>
-    
+
     <services>
-        
+
         <!-- Main paging service -->
         <service id="kg_pager" class="%kg_pager.composite.class%">
             <argument type="collection">
@@ -29,26 +29,26 @@
                 <argument type="service" id="kg_pager.array" />
             </argument>
         </service>
-        
+
         <!-- DQL pager -->
         <service id="kg_pager.dql" class="%kg_pager.generic.class%">
             <argument>%kg_pager.dql.provider.class%</argument>
             <argument>%kg_pager.dql.target.class%</argument>
         </service>
-        
+
         <!-- ORM QueryBuilder pager -->
         <service id="kg_pager.qb.orm" class="%kg_pager.generic.class%">
             <argument>%kg_pager.qb.orm.provider.class%</argument>
             <argument>%kg_pager.qb.orm.target.class%</argument>
         </service>
-        
+
         <!-- DBAL QueryBuilder pager -->
         <service id="kg_pager.qb.dbal" class="%kg_pager.generic.class%">
             <argument>%kg_pager.qb.dbal.provider.class%</argument>
             <argument>%kg_pager.qb.dbal.target.class%</argument>
         </service>
-        
+
         <service id="kg_pager.array" class="%kg_pager.array.class%" />
-        
+
     </services>
 </container>

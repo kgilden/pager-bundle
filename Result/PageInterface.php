@@ -25,7 +25,7 @@ interface PageInterface extends ArrayAccess, Countable, IteratorAggregate
      *
      * @api
      */
-    function setElementCount($elementCount);
+    public function setElementCount($elementCount);
 
     /**
      * Gets the total number of elements paged.
@@ -34,14 +34,14 @@ interface PageInterface extends ArrayAccess, Countable, IteratorAggregate
      *
      * @api
      */
-    function getElementCount();
+    public function getElementCount();
 
     /**
      * @param integer $elementsPerPage
      *
      * @api
      */
-    function setElementsPerPage($elementsPerPage);
+    public function setElementsPerPage($elementsPerPage);
 
     /**
      * Gets the offset from the first element as if the elements were not paged.
@@ -50,7 +50,7 @@ interface PageInterface extends ArrayAccess, Countable, IteratorAggregate
      *
      * @api
      */
-    function getOffset();
+    public function getOffset();
 
     /**
      * Gets the total number of pages.
@@ -59,7 +59,7 @@ interface PageInterface extends ArrayAccess, Countable, IteratorAggregate
      *
      * @api
      */
-    function getPageCount();
+    public function getPageCount();
 
     /**
      * Sets the number of the current page.
@@ -68,7 +68,7 @@ interface PageInterface extends ArrayAccess, Countable, IteratorAggregate
      *
      * @api
      */
-    function setCurrentPage($currentPage);
+    public function setCurrentPage($currentPage);
 
     /**
      * Gets the page number that this instance represents.
@@ -77,21 +77,21 @@ interface PageInterface extends ArrayAccess, Countable, IteratorAggregate
      *
      * @api
      */
-    function getCurrentPage();
+    public function getCurrentPage();
 
     /**
      * @return boolean
      *
      * @api
      */
-    function isFirst();
+    public function isFirst();
 
     /**
      * @return boolean
      *
      * @api
      */
-    function isLast();
+    public function isLast();
 
     /**
      * Gets all the elements.
@@ -100,7 +100,7 @@ interface PageInterface extends ArrayAccess, Countable, IteratorAggregate
      *
      * @api
      */
-    function all();
+    public function all();
 
     /**
      * Adds a callback to modify each result separately by executing it once
@@ -124,7 +124,7 @@ interface PageInterface extends ArrayAccess, Countable, IteratorAggregate
      *
      * @api
      */
-    function addElementCb($cb);
+    public function addElementCb($cb);
 
     /**
      * Adds a callback to modify the results in bulk. The whole result set is
@@ -154,5 +154,5 @@ interface PageInterface extends ArrayAccess, Countable, IteratorAggregate
      *
      * @api
      */
-    function addPageCb($cb);
+    public function addPageCb($cb);
 }

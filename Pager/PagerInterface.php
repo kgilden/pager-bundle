@@ -17,14 +17,14 @@ namespace KG\Bundle\PagerBundle\Pager;
 interface PagerInterface
 {
     /**
-     * @param mixed $target     The target to be paginated.
-     * @param array $options    Paging specific options.
+     * @param mixed $target  The target to be paginated.
+     * @param array $options Paging specific options.
      *
      * @return Collection
      *
      * @api
      */
-    function paginate($target, array $options = array());
+    public function paginate($target, array $options = array());
 
     /**
      * Returns whether the pager is able to paginate the specified target.
@@ -35,5 +35,5 @@ interface PagerInterface
      *
      * @api
      */
-    function supports($target);
+    public function supports($target);
 }
