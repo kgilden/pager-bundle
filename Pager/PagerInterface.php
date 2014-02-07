@@ -11,8 +11,6 @@
 
 namespace KG\Bundle\PagerBundle\Pager;
 
-use KG\Bundle\PagerBundle\Result\Collection;
-
 /**
  * @author Kristen Gilden <kristen.gilden@gmail.com>
  */
