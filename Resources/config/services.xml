@@ -11,6 +11,7 @@
         <parameter key="kg_pager.dql.provider.class">KG\Bundle\PagerBundle\Result\Provider\DQLProvider</parameter>
         <parameter key="kg_pager.dql.target.class">Doctrine\ORM\Query</parameter>
         <parameter key="kg_pager.generic.class">KG\Bundle\PagerBundle\Pager\GenericPager</parameter>
+        <parameter key="kg_pager.doctrine_dbal_qb.class">KG\Bundle\PagerBundle\Pager\Doctrine\DBALQueryBuilderPager</parameter>
         <parameter key="kg_pager.doctrine_orm.class">KG\Bundle\PagerBundle\Pager\Doctrine\ORMPager</parameter>
         <parameter key="kg_pager.qb.dbal.provider.class">KG\Bundle\PagerBundle\Result\Provider\DBALQueryBuilderProvider</parameter>
         <parameter key="kg_pager.qb.dbal.target.class">Doctrine\DBAL\Query\QueryBuilder</parameter>
@@ -25,7 +26,7 @@
         <service id="kg_pager" class="%kg_pager.composite.class%">
             <argument type="collection">
                 <argument type="service" id="kg_pager.doctrine_orm" />
-                <argument type="service" id="kg_pager.qb.dbal" />
+                <argument type="service" id="kg_pager.doctrine_dbal_qb" />
                 <argument type="service" id="kg_pager.array" />
             </argument>
         </service>
@@ -37,10 +38,7 @@
         <service id="kg_pager.qb.orm" alias="kg_pager.doctrine_orm" />
 
         <!-- DBAL QueryBuilder pager -->
-        <service id="kg_pager.qb.dbal" class="%kg_pager.generic.class%">
-            <argument>%kg_pager.qb.dbal.provider.class%</argument>
-            <argument>%kg_pager.qb.dbal.target.class%</argument>
-        </service>
+        <service id="kg_pager.doctrine_dbal_qb" class="%kg_pager.doctrine_dbal_qb.class%" />
 
         <service id="kg_pager.array" class="%kg_pager.array.class%" />
 
