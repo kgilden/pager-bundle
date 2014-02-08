@@ -13,33 +13,31 @@ namespace KG\Bundle\PagerBundle\Result\Provider;
 
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use KG\Bundle\PagerBundle\Exception\UnexpectedTypeException;
 
 /**
- * Doctrine DQL provider for paging DQL queries. Uses the cookbook example
- * found at http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/cookbook/dql-custom-walkers.html#extending-dql-in-doctrine-2-custom-ast-walkers
- *
- * Note that this only works if your entity has only one identifier field
- * (composite keys won’t work).
- *
- * You should be very careful with trying to page queries with a GROUP BY
- * clause: as the counting query replaces select expressions which could
- * potentially cause the query to return several rows instead of a single one.
- * Consider manually setting the count query to be 100% sure instead.
+ * Doctrine DQL provider for paging DQL queries. Takes advantage of the
+ * Doctrine Paginator (http://docs.doctrine-project.org/en/latest/tutorials/pagination.html).
  *
  * @author Kristen Gilden <kristen.gilden@gmail.com>
  */
 class DQLProvider implements ProviderInterface
 {
     /**
-     * @var Query
-     */
-    protected $query;
-
-    /**
      * @var integeger
      */
     protected $elementCount;
+
+    /**
+     * @var Paginator
+     */
+    protected $paginator;
+
+    /**
+     * @var Query
+     */
+    protected $query;
 
     /**
      * @param Query|QueryBuilder $query A doctrine ORM query or query builder
@@ -56,6 +54,7 @@ class DQLProvider implements ProviderInterface
             throw new UnexpectedTypeException($query, 'Doctrine\ORM\Query');
         }
 
+        $this->paginator = new Paginator($query);
         $this->query = $query;
     }
 
@@ -65,19 +64,7 @@ class DQLProvider implements ProviderInterface
     public function getElementCount()
     {
         if (!isset($this->elementCount)) {
-            $countQuery = clone $this->query;
-            $countQuery->setParameters($this->query->getParameters());
-            $countQuery->setHint(Query::HINT_CUSTOM_TREE_WALKERS, array(
-                'KG\\Bundle\\PagerBundle\\Doctrine\\CountSQLWalker'
-            ));
-
-            // Resets any limit constraints set on the initial query.
-            $countQuery
-                ->setFirstResult(null)
-                ->setMaxResults(null)
-            ;
-
-            $this->elementCount = $countQuery->getSingleScalarResult();
+            $this->elementCount = $this->paginator->count();
         }
 
         return $this->elementCount;
@@ -91,8 +78,8 @@ class DQLProvider implements ProviderInterface
         $this->query
             ->setFirstResult($offset)
             ->setMaxResults($count)
-         ;
+        ;
 
-         return $this->query->getResult();
+        return iterator_to_array($this->paginator->getIterator());
     }
 }
