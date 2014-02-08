@@ -46,9 +46,7 @@ abstract class AbstractPage implements PageInterface
      */
     public function __construct(array $elements = null)
     {
-        if (!is_null($elements)) {
-            $this->set($elements);
-        }
+        $this->set($elements ?: array());
     }
 
     /**

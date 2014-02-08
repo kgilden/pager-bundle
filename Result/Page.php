@@ -34,14 +34,6 @@ class Page extends AbstractPage
     protected $currentPage;
 
     /**
-     * @param array $elements
-     */
-    public function __construct(array $elements = array())
-    {
-        $this->set($elements);
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function setElementCount($elementCount)

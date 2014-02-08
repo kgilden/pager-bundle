@@ -18,6 +18,13 @@ use KG\Bundle\PagerBundle\Result\Page;
  */
 class PageTest extends \PHPUnit_Framework_TestCase
 {
+    public function testPageConstructorAcceptsNull()
+    {
+        $page = new Page(null);
+
+        $this->assertCount(0, $page);
+    }
+
     /**
      * @dataProvider negativeIntegerProvider
      * @expectedException LogicException
