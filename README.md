@@ -124,6 +124,9 @@ Testing
 Simply run `phpunit` in the root directory of the bundle to run the full
 test suite.
 
+Unit tests can be run using `phpunit --testsuite "Unit Tests"`, functional
+tests by using `phpunit --testsuite "Functional Tests"`.
+
 License
 -------
 

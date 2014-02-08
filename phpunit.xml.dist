@@ -15,6 +15,13 @@
         <testsuite name="Complete Test Suite">
             <directory>./Tests</directory>
         </testsuite>
+        <testsuite name="Unit Tests">
+            <directory>./Tests/Pager</directory>
+            <directory>./Tests/Result</directory>
+        </testsuite>
+        <testsuite name="Functional Tests">
+            <directory>./Tests/Functional/</directory>
+        </testsuite>
     </testsuites>
     
 </phpunit>
