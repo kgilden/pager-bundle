@@ -11,7 +11,7 @@
 
 namespace KG\Bundle\PagerBundle\Tests\Pager;
 
-use KG\Bundle\PagerBundle\Pager\DoctrineORMPager;
+use KG\Bundle\PagerBundle\Pager\Doctrine\ORMPager;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 
@@ -22,7 +22,7 @@ class ORMPagerTest extends \PHPUnit_Framework_TestCase
 {
     public function testPaginateReturnsPage()
     {
-        $pager = new DoctrineORMPager();
+        $pager = new ORMPager();
         $query = new Query($this->getMockEntityManager());
 
         $this->assertInstanceOf('KG\Bundle\PagerBundle\Result\PageInterface', $pager->paginate($query));
@@ -33,7 +33,7 @@ class ORMPagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSupports($target)
     {
-        $pager = new DoctrineORMPager();
+        $pager = new ORMPager();
 
         $this->assertTrue($pager->supports($target));
     }
@@ -51,7 +51,7 @@ class ORMPagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotSupports($target)
     {
-        $pager = new DoctrineORMPager();
+        $pager = new ORMPager();
 
         $this->assertFalse($pager->supports($target));
     }

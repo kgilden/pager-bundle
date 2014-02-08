@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace KG\Bundle\PagerBundle\Pager;
+namespace KG\Bundle\PagerBundle\Pager\Doctrine;
 
 use KG\Bundle\PagerBundle\Pager\Pager;
 use Doctrine\ORM\QueryBuilder;
@@ -19,7 +19,7 @@ use KG\Bundle\PagerBundle\Result\Provider\DQLProvider;
 /**
  * @author Kristen Gilden <gilden@planet.ee>
  */
-class DoctrineORMPager extends Pager
+class ORMPager extends Pager
 {
     /**
      * {@inheritDoc}

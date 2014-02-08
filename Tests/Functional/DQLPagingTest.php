@@ -11,7 +11,7 @@
 
 namespace KG\Bundle\PagerBundle\Tests\Functional;
 
-use KG\Bundle\PagerBundle\Pager\DoctrineORMPager;
+use KG\Bundle\PagerBundle\Pager\Doctrine\ORMPager;
 use KG\Bundle\PagerBundle\Test\DoctrineTestCase;
 use KG\Bundle\PagerBundle\Test\Entity\Entity;
 use KG\Bundle\PagerBUndle\Test\Entity\Related;
@@ -49,7 +49,7 @@ class DQLPagingTest extends DoctrineTestCase
             ->createQuery('SELECT e FROM KG\Bundle\PagerBundle\Test\Entity\Entity e')
         ;
 
-        $pager = new DoctrineORMPager();
+        $pager = new ORMPager();
 
         $entities = $pager->paginate($query);
         $entities->setElementsPerPage(5);
@@ -64,7 +64,7 @@ class DQLPagingTest extends DoctrineTestCase
             ->getEntityManager()
             ->createQuery('SELECT e, r FROM KG\Bundle\PagerBundle\Test\Entity\Entity e LEFT JOIN e.related r');
 
-        $pager = new DoctrineORMPager();
+        $pager = new ORMPager();
 
         $entities = $pager->paginate($query);
         $entities->setElementsPerPage(5);

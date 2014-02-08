@@ -11,7 +11,7 @@
         <parameter key="kg_pager.dql.provider.class">KG\Bundle\PagerBundle\Result\Provider\DQLProvider</parameter>
         <parameter key="kg_pager.dql.target.class">Doctrine\ORM\Query</parameter>
         <parameter key="kg_pager.generic.class">KG\Bundle\PagerBundle\Pager\GenericPager</parameter>
-        <parameter key="kg_pager.doctrine_orm.class">KG\Bundle\PagerBundle\Pager\DoctrineORMPager</parameter>
+        <parameter key="kg_pager.doctrine_orm.class">KG\Bundle\PagerBundle\Pager\Doctrine\ORMPager</parameter>
         <parameter key="kg_pager.qb.dbal.provider.class">KG\Bundle\PagerBundle\Result\Provider\DBALQueryBuilderProvider</parameter>
         <parameter key="kg_pager.qb.dbal.target.class">Doctrine\DBAL\Query\QueryBuilder</parameter>
         <parameter key="kg_pager.qb.orm.provider.class">KG\Bundle\PagerBundle\Result\Provider\ORMQueryBuilderProvider</parameter>
