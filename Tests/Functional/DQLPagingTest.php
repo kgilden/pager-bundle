@@ -11,7 +11,7 @@
 
 namespace KG\Bundle\PagerBundle\Tests\Functional;
 
-use KG\Bundle\PagerBundle\Pager\GenericPager;
+use KG\Bundle\PagerBundle\Pager\DoctrineORMPager;
 use KG\Bundle\PagerBundle\Test\DoctrineTestCase;
 use KG\Bundle\PagerBundle\Test\Entity\Entity;
 use KG\Bundle\PagerBUndle\Test\Entity\Related;
@@ -49,7 +49,7 @@ class DQLPagingTest extends DoctrineTestCase
             ->createQuery('SELECT e FROM KG\Bundle\PagerBundle\Test\Entity\Entity e')
         ;
 
-        $pager = $this->createDQLPager();
+        $pager = new DoctrineORMPager();
 
         $entities = $pager->paginate($query);
         $entities->setElementsPerPage(5);
@@ -64,23 +64,12 @@ class DQLPagingTest extends DoctrineTestCase
             ->getEntityManager()
             ->createQuery('SELECT e, r FROM KG\Bundle\PagerBundle\Test\Entity\Entity e LEFT JOIN e.related r');
 
-        $pager = $this->createDQLPager();
+        $pager = new DoctrineORMPager();
 
         $entities = $pager->paginate($query);
         $entities->setElementsPerPage(5);
         $entities->setCurrentPage(1);
 
         $this->assertCount(5, $entities);
-    }
-
-    /**
-     * @return \KG\Bundle\PagerBundle\Pager\PagerInterface
-     */
-    private function createDQLPager()
-    {
-        return new GenericPager(
-            'KG\Bundle\PagerBundle\Result\Provider\DQLProvider',
-            'Doctrine\ORM\Query'
-        );
     }
 }
