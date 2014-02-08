@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace KG\Bundle\PagerBundle\Tests\Functional;
+namespace KG\Bundle\PagerBundle\Tests\Functional\Doctrine;
 
 use KG\Bundle\PagerBundle\Pager\Doctrine\ORMPager;
 use KG\Bundle\PagerBundle\Test\DoctrineTestCase;
@@ -20,7 +20,7 @@ use Doctrine\ORM\Query\Expr\Join;
 /**
  * @author Kristen Gilden <gilden@planet.ee>
  */
-class DQLPagingTest extends DoctrineTestCase
+class ORMPagingTest extends DoctrineTestCase
 {
     protected function setUp()
     {
