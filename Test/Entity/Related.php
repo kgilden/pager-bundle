@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace KG\Bundle\PagerBUndle\Test\Entity;
+namespace KG\Bundle\PagerBundle\Test\Entity;
 
 use KG\Bundle\PagerBundle\Test\Entity\Entity;
 

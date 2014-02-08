@@ -14,7 +14,7 @@ namespace KG\Bundle\PagerBundle\Tests\Functional;
 use KG\Bundle\PagerBundle\Pager\Doctrine\ORMPager;
 use KG\Bundle\PagerBundle\Test\DoctrineTestCase;
 use KG\Bundle\PagerBundle\Test\Entity\Entity;
-use KG\Bundle\PagerBUndle\Test\Entity\Related;
+use KG\Bundle\PagerBundle\Test\Entity\Related;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
