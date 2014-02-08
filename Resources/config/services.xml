@@ -24,7 +24,6 @@
         <service id="kg_pager" class="%kg_pager.composite.class%">
             <argument type="collection">
                 <argument type="service" id="kg_pager.dql" />
-                <argument type="service" id="kg_pager.qb.orm" />
                 <argument type="service" id="kg_pager.qb.dbal" />
                 <argument type="service" id="kg_pager.array" />
             </argument>
@@ -37,10 +36,7 @@
         </service>
 
         <!-- ORM QueryBuilder pager -->
-        <service id="kg_pager.qb.orm" class="%kg_pager.generic.class%">
-            <argument>%kg_pager.qb.orm.provider.class%</argument>
-            <argument>%kg_pager.qb.orm.target.class%</argument>
-        </service>
+        <service id="kg_pager.qb.orm" alias="kg_pager.dql" />
 
         <!-- DBAL QueryBuilder pager -->
         <service id="kg_pager.qb.dbal" class="%kg_pager.generic.class%">

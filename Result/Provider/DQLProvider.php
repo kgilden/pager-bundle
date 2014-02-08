@@ -12,6 +12,8 @@
 namespace KG\Bundle\PagerBundle\Result\Provider;
 
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
+use KG\Bundle\PagerBundle\Exception\UnexpectedTypeException;
 
 /**
  * Doctrine DQL provider for paging DQL queries. Uses the cookbook example
@@ -40,10 +42,20 @@ class DQLProvider implements ProviderInterface
     protected $elementCount;
 
     /**
-     * @param Query $query
+     * @param Query|QueryBuilder $query A doctrine ORM query or query builder
+     *
+     * @throws UnexpectedTypeException if the passsed query type is incorrect
      */
-    public function __construct(Query $query)
+    public function __construct($query)
     {
+        if ($query instanceof QueryBuilder) {
+            $query = $query->getQuery();
+        }
+
+        if (!$query instanceof Query) {
+            throw new UnexpectedTypeException($query, 'Doctrine\ORM\Query');
+        }
+
         $this->query = $query;
     }
 
