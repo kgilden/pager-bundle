@@ -35,6 +35,21 @@ class KGPagerExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('kg_pager.invalid_page_redirector', array_keys($container->findTaggedServiceIds('kernel.event_listener')));
     }
 
+    public function testCustomRedirecyQueryStringKeyUsed()
+    {
+        $container = new ContainerBuilder();
+        $loader = new KGPagerExtension();
+        $loader->load(array($this->getFullConfig()), $container);
+
+        $args = $container
+            ->getDefinition('kg_pager.invalid_page_redirector')
+            ->getArguments()
+        ;
+
+        $this->assertCount(1, $args);
+        $this->assertEquals('foobar', array_shift($args));
+    }
+
     private function getEmptyConfig()
     {
         $yaml = <<<YAML
@@ -49,6 +64,7 @@ YAML;
     {
         $yaml = <<<YAML
 redirect_if_out_of_range: true
+redirect_key: foobar
 YAML;
 
         $parser = new Parser();

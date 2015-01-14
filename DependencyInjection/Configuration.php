@@ -17,6 +17,9 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('redirect_if_out_of_range')
                     ->defaultFalse()
                 ->end()
+                ->scalarNode('redirect_key')
+                    ->defaultNull()
+                ->end()
             ->end()
         ;
 

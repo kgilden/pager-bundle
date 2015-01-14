@@ -46,6 +46,7 @@
         <!-- Removed by default, only left if explicitly enabled -->
         <service id="kg_pager.invalid_page_redirector" class="%kg_pager.invalid_page_redirector.class%">
             <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />
+            <!-- first argument MAY be set by configuration -->
         </service>
 
     </services>
