@@ -1,7 +1,7 @@
 KGPagerBundle
 =============
 
-[![Build Status](https://travis-ci.org/kgilden/pager-bundle.png)](https://travis-ci.org/kgilden/pager-bundle)
+[![Build Status](https://img.shields.io/travis/kgilden/pager-bundle/master.svg?style=flat)](https://travis-ci.org/kgilden/pager-bundle)
 
 KGPagerBundle is a simple bundle to paginate iterable elements. Out of the box
 the bundle is able to page the following:
