@@ -92,6 +92,7 @@ Add KGPagerBundle in your `composer.json`:
 }
 ```
 
+
 Update the dependencies:
 
     composer update kgilden/pager-bundle
@@ -110,6 +111,23 @@ public function registerBundles()
     );
 }
 ```
+
+Configuration
+-------------
+
+The following configuration is exposed:
+
+    kg_pager:
+        redirect_if_out_of_range: true  # optional, "false" by default
+        redirect_key: foo               # optional, "page" by default
+
+Setting `redirect_if_out_of_range` to true will make the bundle register a
+listener to redirect all requests falling out of the pagination page range
+to either the last or first page. NB! This works only for `GET` requests.
+
+By default the `page` query string key is expected to contain the current
+page (i.e. `http://example.com?page=2`), but this can be modified by
+defining `redirect_key`.
 
 Contributing
 ------------
