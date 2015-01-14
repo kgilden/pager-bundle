@@ -102,7 +102,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException OutOfRangeException
+     * @expectedException KG\Bundle\PagerBundle\Exception\InvalidPageException
      */
     public function testCurrentPageGreaterThanPageCountThrowsException()
     {
@@ -115,7 +115,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException OutOfRangeException
+     * @expectedException KG\Bundle\PagerBundle\Exception\InvalidPageException
      */
     public function testNegativeCurrentPageThrowsException()
     {
