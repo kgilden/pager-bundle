@@ -11,6 +11,8 @@
 
 namespace KG\Bundle\PagerBundle\Result;
 
+use KG\Bundle\PagerBundle\Exception\InvalidPageException;
+
 /**
  * @author Kristen Gilden <kristen.gilden@gmail.com>
  */
@@ -110,12 +112,8 @@ class Page extends AbstractPage
     {
         $currentPage = (int) $currentPage;
 
-        if ($currentPage > $this->getPageCount()) {
-            throw new \OutOfRangeException('The current page cannot be out of the paginated page range');
-        }
-
-        if ($currentPage < 1) {
-            throw new \OutOfRangeException('Current page cannot be non-positive');
+        if (($currentPage > $this->getPageCount()) || ($currentPage < 1)) {
+            throw new InvalidPageException($currentPage, $this->getPageCount());
         }
 
         $this->currentPage = $currentPage;
