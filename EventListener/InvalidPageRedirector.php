@@ -67,6 +67,6 @@ final class InvalidPageRedirector
         $request = $event->getRequest();
         $uri = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo().$qs;
 
-        return new RedirectResponse($uri);
+        $event->setResponse(new RedirectResponse($uri));
     }
 }

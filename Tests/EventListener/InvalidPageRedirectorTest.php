@@ -12,10 +12,9 @@ class InvalidPageRedirectorTest extends \PHPUnit_Framework_TestCase
     {
         $event = $this->getMockEvent();
         $event->method('getException')->willReturn(new \Exception());
+        $event->expects($this->never())->method('setResponse');
 
         $redirector = new InvalidPageRedirector();
-
-        $this->assertNull($redirector->onKernelException($event));
     }
 
     /**
@@ -29,15 +28,25 @@ class InvalidPageRedirectorTest extends \PHPUnit_Framework_TestCase
         $event->method('getRequest')->willReturn($request);
         $event->method('getException')->willReturn(new InvalidPageException($currentPage, $pageCount));
 
-        $redirector = new InvalidPageRedirector();
-
-        $response = $redirector->onKernelException($event);
-
         if (is_null($expectedPage)) {
-            $this->assertNull($response);
+            $event
+                ->expects($this->never())
+                ->method('setResponse')
+            ;
         } else {
-            $this->assertEquals('http://example.com/?a=2&page='.$expectedPage, $response->getTargetUrl());
+            $testCase = $this;
+
+            $event
+                ->expects($this->once())
+                ->method('setResponse')
+                ->will($this->returnCallback(function ($response) use ($testCase, $expectedPage) {
+                    $testCase->assertEquals('http://example.com/?a=2&page='.$expectedPage, $response->getTargetUrl());
+                }))
+            ;
         }
+
+        $redirector = new InvalidPageRedirector();
+        $redirector->onKernelException($event);
     }
 
     public function getTestData()
