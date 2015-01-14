@@ -1,6 +1,10 @@
 Changelog
 =========
 
+### 1.1.0 (2015-01-15)
+
+* Redirect out of range paged requests with the range (if configured)
+
 ### 1.0.1 (2014-02-10)
 
 * Create separate Doctrine ORM Pager
