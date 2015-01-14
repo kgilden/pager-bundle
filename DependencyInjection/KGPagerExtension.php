@@ -21,5 +21,12 @@ class KGPagerExtension extends Extension
     {
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
+
+        $configuration = $this->getConfiguration($configs, $container);
+        $config = $this->processConfiguration($configuration, $configs);
+
+        if (!$config['redirect_if_out_of_range']) {
+            $container->removeDefinition('kg_pager.invalid_page_redirector');
+        }
     }
 }
