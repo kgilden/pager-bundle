@@ -35,5 +35,9 @@ class KGPagerExtension extends Extension
         if (!$config['redirect_if_out_of_range']) {
             $container->removeDefinition('kg_pager.invalid_page_redirector');
         }
+
+        if (!class_exists('FOS\ElasticaBundle\FOSElasticaBundle')) {
+            $container->removeDefinition('kg_pager.fos_elastica');
+        }
     }
 }
