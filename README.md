@@ -8,6 +8,7 @@ the bundle is able to page the following:
 
 *   Doctrine DQL queries;
 *   SQL in the form of a Doctrine's DBAL QueryBuilder object;
+*   FOSElastica Paginator adapters;
 *   arrays;
 
 The project grew out of necessity to have a simple yet flexible paging
