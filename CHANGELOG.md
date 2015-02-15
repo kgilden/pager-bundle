@@ -1,6 +1,10 @@
 Changelog
 =========
 
+### 1.1.1 (2015-02-15)
+
+* Add pager to work together with FOSElasticaBundle
+
 ### 1.1.0 (2015-01-15)
 
 * Redirect out of range paged requests with the range (if configured)
