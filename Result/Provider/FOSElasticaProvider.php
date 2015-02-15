@@ -41,6 +41,6 @@ class FOSElasticaProvider implements ProviderInterface
      */
     public function getElements($offset, $count)
     {
-        return $this->adapter->getResults($offset, $count);
+        return $this->adapter->getResults($offset, $count)->toArray();
     }
 }

@@ -22,12 +22,19 @@ class FOSElasticaProviderTest extends \PHPUnit_Framework_TestCase
 
     public function getGetElementsDelegatedToAdapter()
     {
+        $results = $this->getMockPartialResults();
+        $results
+            ->expects($this->once())
+            ->method('toArray')
+            ->willReturn($expected = array('foo', 'bar'))
+        ;
+
         $adapter = $this->getMockAdapter();
         $adapter
             ->expects($this->once())
             ->method('getElements')
             ->with($this->equalTo(2), $this->equalTo(4))
-            ->willReturn($expected = array('foo', 'bar'))
+            ->willReturn($results)
         ;
 
         $provider = new FOSElasticaProvider($adapter);
@@ -38,5 +45,10 @@ class FOSElasticaProviderTest extends \PHPUnit_Framework_TestCase
     private function getMockAdapter()
     {
         return $this->getMock('FOS\ElasticaBundle\Paginator\PaginatorAdapterInterface');
+    }
+
+    private function getMockPartialResults()
+    {
+        return $this->getMock('FOS\ElasticaBundle\Paginator\PartialResultsInterface');
     }
 }
