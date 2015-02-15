@@ -24,13 +24,9 @@
 
     <services>
 
-        <!-- Main paging service -->
+        <!-- Main paging service, contains all enabled pagers -->
         <service id="kg_pager" class="%kg_pager.composite.class%">
-            <argument type="collection">
-                <argument type="service" id="kg_pager.doctrine_orm" />
-                <argument type="service" id="kg_pager.doctrine_dbal_qb" />
-                <argument type="service" id="kg_pager.array" />
-            </argument>
+            <!-- First argument will be filled by KGPagerExtension -->
         </service>
 
         <!-- ORM pager -->
