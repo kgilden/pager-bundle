@@ -39,7 +39,7 @@
         <service id="kg_pager.doctrine_dbal_qb" class="%kg_pager.doctrine_dbal_qb.class%" />
 
         <!-- FOSElasticaBundle pager -->
-        <service id="kg_pager.fos_elastica" class="%kg_pager.fos_elastica.class" />
+        <service id="kg_pager.fos_elastica" class="%kg_pager.fos_elastica.class%" />
 
         <service id="kg_pager.array" class="%kg_pager.array.class%" />
 
