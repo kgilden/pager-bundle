@@ -54,7 +54,7 @@ class KGPagerExtension extends Extension
 
         foreach ($pagers as $pager => $requiredClass) {
             if (!$requiredClass || class_exists($requiredClass)) {
-                $enabledPagers[] = $pager;
+                $enabledPagers[] = $container->getDefinition($pager);
             } else {
                 $container->removeDefinition($pager);
             }
