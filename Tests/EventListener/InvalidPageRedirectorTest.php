@@ -3,7 +3,7 @@
 namespace KG\Bundle\PagerBundle\Tests\EventListener;
 
 use KG\Bundle\PagerBundle\EventListener\InvalidPageRedirector;
-use KG\Bundle\PagerBundle\Exception\InvalidPageException;
+use KG\Pager\Exception\InvalidPageException;
 use Symfony\Component\HttpFoundation\Request;
 
 class InvalidPageRedirectorTest extends \PHPUnit_Framework_TestCase

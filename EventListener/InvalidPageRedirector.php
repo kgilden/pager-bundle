@@ -2,7 +2,7 @@
 
 namespace KG\Bundle\PagerBundle\EventListener;
 
-use KG\Bundle\PagerBundle\Exception\InvalidPageException;
+use KG\Pager\Exception\InvalidPageException;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
