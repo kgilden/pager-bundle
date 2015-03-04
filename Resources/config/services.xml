@@ -6,15 +6,15 @@
 
     <parameters>
 
-        <parameter key="kg_pager.class">KG\Page\Pager</parameter>
+        <parameter key="kg_pager.class">KG\Pager\Pager</parameter>
+        <parameter key="kg_pager.request_decorator.class">KG\Pager\RequestDecorator</parameter>
+        <parameter key="kg_pager.strategy.last_page_merged.class">KG\Pager\PagingStrategy\LastPageMerged</parameter>
         <parameter key="kg_pager.invalid_page_redirector.class">KG\Bundle\PagerBundle\EventListener\InvalidPageRedirector</parameter>
 
     </parameters>
 
     <services>
 
-        <!-- Main paging service -->
-        <service id="kg_pager" class="%kg_pager.class%"></service>
 
         <!-- Removed by default, only left if explicitly enabled -->
         <service id="kg_pager.invalid_page_redirector" class="%kg_pager.invalid_page_redirector.class%">
