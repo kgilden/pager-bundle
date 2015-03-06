@@ -2,11 +2,11 @@
 
 namespace KG\Bundle\PagerBundle\Tests\EventListener;
 
-use KG\Bundle\PagerBundle\EventListener\InvalidPageRedirector;
-use KG\Pager\Exception\InvalidPageException;
+use KG\Bundle\PagerBundle\EventListener\OutOfBoundsRedirector;
+use KG\Pager\Exception\OutOfBoundsException;
 use Symfony\Component\HttpFoundation\Request;
 
-class InvalidPageRedirectorTest extends \PHPUnit_Framework_TestCase
+class OutOfBoundsRedirectorTest extends \PHPUnit_Framework_TestCase
 {
     public function testNotRedirectsIfInvalidException()
     {
@@ -14,19 +14,19 @@ class InvalidPageRedirectorTest extends \PHPUnit_Framework_TestCase
         $event->method('getException')->willReturn(new \Exception());
         $event->expects($this->never())->method('setResponse');
 
-        $redirector = new InvalidPageRedirector();
+        $redirector = new OutOfBoundsRedirector();
     }
 
     /**
      * @dataProvider getTestData
      */
-    public function testRedirection($currentPage, $pageCount, $expectedPage)
+    public function testRedirection($pageNumber, $pageCount, $expectedPage)
     {
-        $request = Request::create('http://example.com/?a=2&page=' . $currentPage);
+        $request = Request::create('http://example.com/?a=2&page=' . $pageNumber);
 
         $event = $this->getMockEvent();
         $event->method('getRequest')->willReturn($request);
-        $event->method('getException')->willReturn(new InvalidPageException($currentPage, $pageCount));
+        $event->method('getException')->willReturn(new OutOfBoundsException($pageNumber, $pageCount));
 
         if (is_null($expectedPage)) {
             $event
@@ -45,7 +45,7 @@ class InvalidPageRedirectorTest extends \PHPUnit_Framework_TestCase
             ;
         }
 
-        $redirector = new InvalidPageRedirector();
+        $redirector = new OutOfBoundsRedirector();
         $redirector->onKernelException($event);
     }
 
