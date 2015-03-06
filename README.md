@@ -99,6 +99,8 @@ Any number of pagers can be defined, each with their own settings.
 
             bar: ~                # pager with default settings
 
+The pagers are registered in the service container as `kg_pager.pager.%name%`.
+
 Contributing
 ------------
 
