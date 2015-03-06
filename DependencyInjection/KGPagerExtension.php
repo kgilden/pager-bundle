@@ -54,6 +54,8 @@ class KGPagerExtension extends Extension
      */
     private function registerPagers(array $configs, ContainerBuilder $container)
     {
+        $shouldDisableRedirector = true;
+
         foreach ($configs as $name => $config) {
             $serviceId = sprintf("%s.%s", self::PREFIX_PAGER, $name);
             $definition = $container->register($serviceId, $container->getParameter('kg_pager.class'));
@@ -75,7 +77,7 @@ class KGPagerExtension extends Extension
             // Wraps the pager inside a request decorator to have it automatically
             // infer the current page from the request.
             if ($config['key']) {
-                $container
+                $definition = $container
                     ->register($serviceId, $container->getParameter('kg_pager.request_decorator.class'))
                     ->setArguments(array(
                         $definition,
@@ -84,6 +86,23 @@ class KGPagerExtension extends Extension
                     ))
                 ;
             }
+
+            if ($config['redirect']) {
+                $shouldDisableRedirector = false;
+
+                $definition = $container
+                    ->register($serviceId, $container->getParameter('kg_pager.bounds_check_decorator.class'))
+                    ->setArguments(array($definition))
+                ;
+
+                if ($config['key']) {
+                    $definition->addArgument($config['key']);
+                }
+            }
+        }
+
+        if ($shouldDisableRedirector) {
+            $container->removeDefinition('kg_pager.out_of_bounds_redirector');
         }
     }
 }

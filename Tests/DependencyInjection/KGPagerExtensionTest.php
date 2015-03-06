@@ -23,6 +23,7 @@ pagers:
     default:
         per_page: 15
         key: ~
+        redirect: false
 YAML;
 
         $definition = $this
@@ -39,6 +40,7 @@ YAML;
 pagers:
     default:
         key: my_page
+        redirect: false
 YAML;
 
         $pager = $this
@@ -51,10 +53,11 @@ YAML;
 
     public function testPagerNotWrappedInRequestDecoratorIfCurrentPageNotSet()
     {
-$yaml = <<<YAML
+        $yaml = <<<YAML
 pagers:
     default:
         key: ~
+        redirect: false
 YAML;
 
         $definition = $this
@@ -63,6 +66,41 @@ YAML;
         ;
 
         $this->assertNotEquals('KG\Pager\RequestDecorator', $definition->getClass());
+    }
+
+    public function testPagerWrappedInBoundsCheckDecorator()
+    {
+        $yaml = <<<YAML
+pagers:
+    default:
+        key: foo
+        redirect: true
+YAML;
+
+        $container = $this->createContainer($yaml);
+        $definition = $container->getDefinition('kg_pager.pager.default');
+
+        $this->assertEquals('KG\Pager\BoundsCheckDecorator', $definition->getClass());
+
+        $refl = new \ReflectionClass($definition->getArgument(0)->getClass());
+        $this->assertTrue($refl->implementsInterface('KG\Pager\PagerInterface'));
+        $this->assertEquals('foo', $definition->getArgument(1));
+
+        $this->assertTrue($container->has('kg_pager.out_of_bounds_redirector'));
+    }
+
+    public function testRedirectorRemovedIfNoPagersShouldBeRedirected()
+    {
+        $yaml = <<<YAML
+pagers:
+    default:
+        key: ~
+        redirect: false
+YAML;
+
+        $container = $this->createContainer($yaml);
+
+        $this->assertFalse($container->has('kg_pager.out_of_bounds_redirector'));
     }
 
     public function testMergeStrategyNotUsedByDefault()
@@ -89,6 +127,7 @@ pagers:
     default:
         key: ~
         merge: 0.333
+        redirect: false
 YAML;
 
         $definition = $this

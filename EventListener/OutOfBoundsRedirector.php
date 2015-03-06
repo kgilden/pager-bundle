@@ -12,19 +12,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 final class OutOfBoundsRedirector
 {
     /**
-     * @var string
-     */
-    private $pageKey;
-
-    /**
-     * @param string $pageKey The query string key to set the new page number
-     */
-    public function __construct($pageKey = 'page')
-    {
-        $this->pageKey = $pageKey;
-    }
-
-    /**
      * @param GetResponseForExceptionEvent $event
      *
      * @return RedirectResponse|null
@@ -49,9 +36,9 @@ final class OutOfBoundsRedirector
         $queryBag = clone $event->getRequest()->query;
 
         if ($pageNumber > $pageCount) {
-            $queryBag->set($this->pageKey, $pageCount);
+            $queryBag->set($exception->getRedirectKey(), $pageCount);
         } elseif ($pageNumber < 1) {
-            $queryBag->set($this->pageKey, 1);
+            $queryBag->set($exception->getRedirectKey(), 1);
         } else {
             return; // Super weird, because current page is within the bounds, fall through.
         }

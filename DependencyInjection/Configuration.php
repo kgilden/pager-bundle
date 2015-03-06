@@ -38,11 +38,17 @@ class Configuration implements ConfigurationInterface
                                 ->defaultNull()
                                 ->treatNullLike(0.25)
                             ->end()
+                            ->booleanNode('redirect')
+                                ->info('Whether to redirect out of range requests')
+                                ->defaultValue(true)
+                                ->treatNullLike(true)
+                            ->end()
                         ->end()
                     ->end()
                     ->defaultValue(array('default' => array(
                         'per_page' => 25,
                         'key' => 'page',
+                        'redirect' => true,
                     )))
                 ->end()
             ->end()
