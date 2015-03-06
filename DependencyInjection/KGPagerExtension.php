@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
@@ -81,7 +82,7 @@ class KGPagerExtension extends Extension
                     ->register($serviceId, $container->getParameter('kg_pager.request_decorator.class'))
                     ->setArguments(array(
                         $definition,
-                        $container->getDefinition('request_stack'),
+                        new Reference('request_stack'),
                         $config['key'],
                     ))
                 ;
