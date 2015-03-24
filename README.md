@@ -3,102 +3,88 @@ KGPagerBundle
 
 [![Build Status](https://img.shields.io/travis/kgilden/pager-bundle/master.svg?style=flat)](https://travis-ci.org/kgilden/pager-bundle)
 
-KGPagerBundle is a simple bundle to paginate iterable elements. Out of the box
-the bundle is able to page the following:
-
-*   Doctrine DQL queries;
-*   SQL in the form of a Doctrine's DBAL QueryBuilder object;
-*   FOSElastica Paginator adapters;
-*   arrays;
-
-The project grew out of necessity to have a simple yet flexible paging
-solution, that would be very easy to bolt on.
+KGPagerBundle integrates [kgilden/pager](https://github.com/kgilden/pager) with
+the Symfony framework.
 
 Usage
 -----
 
-Let's say a bunch of Doctrine entities are required to be paged. Simply inject
-the generic pager inside a custom repository.
+By default a single pager is defined. Access it through the `kg_pager` service id.
+The current page is inferred from the `page` query parameter.
 
 ```php
 <?php
-namespace Acme\Bundle\DemoBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
-use KG\Bundle\PagerBundle\Pager\PagerInterface;
+use KG\Pager\Adapter;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class FooRepository extends EntityRepository
+class AcmeDemoController extends Controller
 {
-    public function setPager(PagerInterface $pager)
+    public function listPagedAction()
+    {
+        $qb = $this
+            ->getDoctrine()
+            ->getRepository('AppBundle:Product')
+            ->createQueryBuilder('p')
+        ;
+
+        // 25 items per page is used by default.
+        $itemsPerPage = 10;
+        $page = $this->get('kg_pager')->paginate(Adapter::dql($qb), $itemsPerPage);
+
+        return $this->render('App:Product:listPaged.html.twig', array(
+            'page' => $page
+        ));
+    }
+}
+
+?>
+```
+
+Of course the pager can also be injected to any service.
+
+```php
+<?php
+
+use KG\Pager\Adapter;
+use KG\Pager\PagerInterface;
+
+class ExampleService
+{
+    private $pager;
+
+    public function __construct(PagerInterface $pager)
     {
         $this->pager = $pager;
     }
 
-    /**
-     * Finds all `foo` elements and pages them. This is obviously a very
-     * simple use case for the sake of brevity.
-     *
-     * @return KG\Bundle\PagerBundle\Result\PageInterface
-     */
-    public function findAllPaged()
+    public function doSomethingPaged()
     {
-        $qb = $this->createQueryBuilder('foo');
+        $list = array('foo', 'bar', 'baz');
 
-        return $this->pager->paginate($qb);
+        return $this->pager->paginate(Adapter::_array($list), 2);
     }
 }
+
+?>
 ```
 
-The returned `PageInterface` object is at this point not yet populated with
-the elements. For this to actually happen, the page needs two more pieces
-of information: the current page and the amount of elements to be displayed
-per page. The corresponding controller action would probably look something
-along the lines of the following:
-
-```php
-<?php
-// src/Acme/Bundle/AcmeDemoBundle/Controller/FooController.php
-
-public function listFoosAction()
-{
-    // `$foos` can be iterated over like any other array
-    $foos = $this
-        ->get('doctrine')
-        ->getRepository('AcmeDemoBundle:Foo')
-        ->findAllPaged()
-    ;
-    $foos->setElementsPerPage(25);
-    $foos->setCurrentPage(2);
-
-    return $this->render('AcmeDemoBundle:Foo:list.html', array(
-        'foos' => $foos,
-    ));
-}
+```xml
+<service id="example_service" class="Acme\ExampleService">
+    <argument type="service" id="kg_pager" />
+</service>
 ```
-
-As seen from the previous example, you can decide for yourself when exactly
-is it the right time to set the current page and elements per page. It's
-even possible to set the current page and elements per page in a template.
 
 Installation
 ------------
 
-Add KGPagerBundle in your `composer.json`:
+Install using [composer](https://getcomposer.org/download/):
 
-```json
-{
-    "require": {
-        "kgilden/pager-bundle": "~1.0"
-    }
-}
+```bash
+composer.phar require kgilden/pager-bundle
 ```
 
-
-Update the dependencies:
-
-    composer update kgilden/pager-bundle
-
-Finally enable the bundle by appending it to `app/AppKernel.php`:
+The bundle must then be enabled in the kernel:
 
 ```php
 <?php
@@ -111,24 +97,38 @@ public function registerBundles()
         new KG\Bundle\PagerBundle\KGPagerBundle(),
     );
 }
+?>
 ```
+
+That's it! no extra configuration necessary. You can make sure the bundle's up
+and running by executing
+
+```bash
+app/console container:debug | grep kg_pager
+```
+
+If everything's working, it should print out the pager service.
 
 Configuration
 -------------
 
-The following configuration is exposed:
+You may want to optinally configure the bundle to define several pagers, each
+with their own settings.
 
-    kg_pager:
-        redirect_if_out_of_range: true  # optional, "false" by default
-        redirect_key: foo               # optional, "page" by default
+```yaml
+kg_pager:
+    default: foo              # now `kg_pager` returns a pager named `foo`
+    pagers:
+        foo:
+            per_page: 20      # how many items to have on a single page
+            key: custom_page  # the key used to infer the current page i.e. `http://exapmle.com?custom_page=2`
+            merge: 10         # if less than 10 items are left on the last page, merge it with the previous page
+            redirect: false   # whether to redirect the user, if they requested an out of bounds page
+        bar: ~                # pager with default settings
+```
 
-Setting `redirect_if_out_of_range` to true will make the bundle register a
-listener to redirect all requests falling out of the pagination page range
-to either the last or first page. NB! This works only for `GET` requests.
-
-By default the `page` query string key is expected to contain the current
-page (i.e. `http://example.com?page=2`), but this can be modified by
-defining `redirect_key`.
+The pagers are registered in the service container as `kg_pager.pager.%name%`
+with the default pager aliased to `kg_pager`.
 
 Contributing
 ------------
@@ -142,9 +142,6 @@ Testing
 
 Simply run `phpunit` in the root directory of the bundle to run the full
 test suite.
-
-Unit tests can be run using `phpunit --testsuite "Unit Tests"`, functional
-tests by using `phpunit --testsuite "Functional Tests"`.
 
 License
 -------

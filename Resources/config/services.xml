@@ -6,47 +6,20 @@
 
     <parameters>
 
-        <parameter key="kg_pager.array.class">KG\Bundle\PagerBundle\Pager\ArrayPager</parameter>
-        <parameter key="kg_pager.composite.class">KG\Bundle\PagerBundle\Pager\CompositePager</parameter>
-        <parameter key="kg_pager.doctrine_dbal_qb.class">KG\Bundle\PagerBundle\Pager\Doctrine\DBALQueryBuilderPager</parameter>
-        <parameter key="kg_pager.doctrine_orm.class">KG\Bundle\PagerBundle\Pager\Doctrine\ORMPager</parameter>
-        <parameter key="kg_pager.dql.provider.class">KG\Bundle\PagerBundle\Result\Provider\DQLProvider</parameter>
-        <parameter key="kg_pager.dql.target.class">Doctrine\ORM\Query</parameter>
-        <parameter key="kg_pager.fos_elastica.class">KG\Bundle\PagerBundle\Pager\FOSElasticaPager</parameter>
-        <parameter key="kg_pager.generic.class">KG\Bundle\PagerBundle\Pager\GenericPager</parameter>
-        <parameter key="kg_pager.invalid_page_redirector.class">KG\Bundle\PagerBundle\EventListener\InvalidPageRedirector</parameter>
-        <parameter key="kg_pager.qb.dbal.provider.class">KG\Bundle\PagerBundle\Result\Provider\DBALQueryBuilderProvider</parameter>
-        <parameter key="kg_pager.qb.dbal.target.class">Doctrine\DBAL\Query\QueryBuilder</parameter>
-        <parameter key="kg_pager.qb.orm.provider.class">KG\Bundle\PagerBundle\Result\Provider\ORMQueryBuilderProvider</parameter>
-        <parameter key="kg_pager.qb.orm.target.class">Doctrine\ORM\QueryBuilder</parameter>
+        <parameter key="kg_pager.class">KG\Pager\Pager</parameter>
+        <parameter key="kg_pager.request_decorator.class">KG\Pager\RequestDecorator</parameter>
+        <parameter key="kg_pager.bounds_check_decorator.class">KG\Pager\BoundsCheckDecorator</parameter>
+        <parameter key="kg_pager.strategy.last_page_merged.class">KG\Pager\PagingStrategy\LastPageMerged</parameter>
+        <parameter key="kg_pager.out_of_bounds_redirector.class">KG\Bundle\PagerBundle\EventListener\OutOfBoundsRedirector</parameter>
 
     </parameters>
 
     <services>
 
-        <!-- Main paging service, contains all enabled pagers -->
-        <service id="kg_pager" class="%kg_pager.composite.class%">
-            <!-- First argument will be filled by KGPagerExtension -->
-        </service>
 
-        <!-- ORM pager -->
-        <service id="kg_pager.doctrine_orm" class="%kg_pager.doctrine_orm.class%" />
-
-        <!-- ORM QueryBuilder pager -->
-        <service id="kg_pager.qb.orm" alias="kg_pager.doctrine_orm" />
-
-        <!-- DBAL QueryBuilder pager -->
-        <service id="kg_pager.doctrine_dbal_qb" class="%kg_pager.doctrine_dbal_qb.class%" />
-
-        <!-- FOSElasticaBundle pager -->
-        <service id="kg_pager.fos_elastica" class="%kg_pager.fos_elastica.class%" />
-
-        <service id="kg_pager.array" class="%kg_pager.array.class%" />
-
-        <!-- Removed by default, only left if explicitly enabled -->
-        <service id="kg_pager.invalid_page_redirector" class="%kg_pager.invalid_page_redirector.class%">
+        <!-- This is kept enabled only if any of the pagers should redirect. -->
+        <service id="kg_pager.out_of_bounds_redirector" class="%kg_pager.out_of_bounds_redirector.class%">
             <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />
-            <!-- first argument MAY be set by configuration -->
         </service>
 
     </services>

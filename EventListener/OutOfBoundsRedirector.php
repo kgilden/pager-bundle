@@ -2,28 +2,15 @@
 
 namespace KG\Bundle\PagerBundle\EventListener;
 
-use KG\Bundle\PagerBundle\Exception\InvalidPageException;
+use KG\Pager\Exception\OutOfBoundsException;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Redirects to the nearest existing page, if the current page is out of range.
  */
-final class InvalidPageRedirector
+final class OutOfBoundsRedirector
 {
-    /**
-     * @var string
-     */
-    private $pageKey;
-
-    /**
-     * @param string $pageKey The query string key to set the new page number
-     */
-    public function __construct($pageKey = 'page')
-    {
-        $this->pageKey = $pageKey;
-    }
-
     /**
      * @param GetResponseForExceptionEvent $event
      *
@@ -35,11 +22,11 @@ final class InvalidPageRedirector
     {
         $exception = $event->getException();
 
-        if (!$exception instanceof InvalidPageException) {
+        if (!$exception instanceof OutOfBoundsException) {
             return;
         }
 
-        $currentPage = $exception->getCurrentPage();
+        $pageNumber = $exception->getPageNumber();
         $pageCount = $exception->getPageCount();
 
         if ($pageCount < 1) {
@@ -48,10 +35,10 @@ final class InvalidPageRedirector
 
         $queryBag = clone $event->getRequest()->query;
 
-        if ($currentPage > $pageCount) {
-            $queryBag->set($this->pageKey, $pageCount);
-        } elseif ($currentPage < 1) {
-            $queryBag->set($this->pageKey, 1);
+        if ($pageNumber > $pageCount) {
+            $queryBag->set($exception->getRedirectKey(), $pageCount);
+        } elseif ($pageNumber < 1) {
+            $queryBag->set($exception->getRedirectKey(), 1);
         } else {
             return; // Super weird, because current page is within the bounds, fall through.
         }
