@@ -75,31 +75,60 @@ class ExampleService
 </service>
 ```
 
+Installation
+------------
+
+Install using [composer](https://getcomposer.org/download/):
+
+```bash
+composer.phar require kgilden/pager-bundle
+```
+
+The bundle must then be enabled in the kernel:
+
+```php
+<?php
+// app/AppKernel.php
+
+public function registerBundles()
+{
+    $bundles = array(
+        // ...
+        new KG\Bundle\PagerBundle\KGPagerBundle(),
+    );
+}
+?>
+```
+
+That's it! no extra configuration necessary. You can make sure the bundle's up
+and running by executing
+
+```bash
+app/console container:debug | grep kg_pager
+```
+
+If everything's working, it should print out the pager service.
+
 Configuration
 -------------
 
-The following is the minium of configuration necessary to enable the bundle.
+You may want to optinally configure the bundle to define several pagers, each
+with their own settings.
 
-    kg_pager: ~
+```yaml
+kg_pager:
+    default: foo              # now `kg_pager` returns a pager named `foo`
+    pagers:
+        foo:
+            per_page: 20      # how many items to have on a single page
+            key: custom_page  # the key used to infer the current page i.e. `http://exapmle.com?custom_page=2`
+            merge: 10         # if less than 10 items are left on the last page, merge it with the previous page
+            redirect: false   # whether to redirect the user, if they requested an out of bounds page
+        bar: ~                # pager with default settings
+```
 
-Any number of pagers can be defined, each with their own settings.
-
-    kg_pager:
-
-        default: foo              # now `kg_pager` returns a pager named `foo`
-        pagers:
-            foo:
-                per_page: 20      # how many items to have on a single page
-                key: custom_page  # the key used to infer the current page
-                                  # i.e. `http://exapmle.com?custom_page=2`
-                merge: 10         # if less than 10 items are left on the
-                                  # last page, merge it with the previous page
-                redirect: false   # whether to redirect the user, if they
-                                  # requested an out of bounds page
-
-            bar: ~                # pager with default settings
-
-The pagers are registered in the service container as `kg_pager.pager.%name%`.
+The pagers are registered in the service container as `kg_pager.pager.%name%`
+with the default pager aliased to `kg_pager`.
 
 Contributing
 ------------
