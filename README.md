@@ -1,7 +1,7 @@
 KGPagerBundle
 =============
 
-[![Build Status](https://img.shields.io/travis/kgilden/pager-bundle/master.svg?style=flat)](https://travis-ci.org/kgilden/pager-bundle)
+[![Build Status](https://img.shields.io/travis/kgilden/pager-bundle/master.svg?style=flat-square)](https://travis-ci.org/kgilden/pager-bundle)
 
 KGPagerBundle integrates [kgilden/pager](https://github.com/kgilden/pager) with
 the Symfony framework.
