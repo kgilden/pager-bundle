@@ -1,6 +1,12 @@
 Changelog
 =========
 
+### 2.0.0 (2015-05-09)
+
+* Use PSR-4 for autoloading
+* Redesign semantic configuration (enabling multiple pagers)
+* Move logic to [`kgilden/pager`](https://github.com/kgilden/pager) library
+
 ### 1.1.1 (2015-02-15)
 
 * Add pager to work together with FOSElasticaBundle
