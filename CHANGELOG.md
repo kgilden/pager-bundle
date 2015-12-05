@@ -1,6 +1,10 @@
 Changelog
 =========
 
+### 2.0.1 (2015-12-05)
+
+* Add support for Symfony v3.0
+
 ### 2.0.0 (2015-05-09)
 
 * Use PSR-4 for autoloading
