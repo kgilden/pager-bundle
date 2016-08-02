@@ -1,6 +1,11 @@
 Changelog
 =========
 
+### 3.0.0 (2016-08-02)
+
+* Drop support for PHP versions 5.3, 5.4 and 5.5
+* Add PagerAwareRepositoryFactory for Doctrine
+
 ### 2.0.1 (2015-12-05)
 
 * Add support for Symfony v3.0
