@@ -32,6 +32,11 @@ class KGPagerExtension extends Extension
 
         $this->registerPagers($config['pagers'], $container);
         $this->setDefaultPager($config['default'], $container);
+
+        if (!class_exists('Doctrine\ORM\Version')) {
+            // Doctrine not installed, remove the pager aware repository factory.
+            $container->removeDefinition('kg_pager.pager_aware_repository_factory');
+        }
     }
 
     /**

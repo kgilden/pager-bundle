@@ -130,6 +130,22 @@ kg_pager:
 The pagers are registered in the service container as `kg_pager.pager.%name%`
 with the default pager aliased to `kg_pager`.
 
+You may optionally want to have the default pager be automatically injected to
+your entity repositories. For this do the following:
+
+ * Have a custom repository class implement [`PagerAwareInterface`][Doctrine/PagerAwareInterface.php];
+ * Set the class as the default repository class and add a custom factory service
+   in doctrine configuration:
+
+   ```yml
+   // app/config/config.yml
+   doctrine:
+       orm:
+           default_repository_class: 'Repository\Implementing\PagerAwareInterface'
+           repository_factory: 'kg_pager.pager_aware_repository_factory'
+
+   ```
+
 Contributing
 ------------
 
