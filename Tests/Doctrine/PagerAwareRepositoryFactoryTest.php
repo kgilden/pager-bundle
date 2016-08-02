@@ -2,29 +2,26 @@
 
 namespace KG\Bundle\PlanBundle\Tests\Doctrine;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Repository\RepositoryFactory;
-use KG\Bundle\PagerBundle\Doctrine\PagerAwareInterface;
 use KG\Bundle\PagerBundle\Doctrine\PagerAwareRepositoryFactory;
-use KG\Pager\PagerInterface;
 
 class PagerAwareRepositoryFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testPagerSetToPagerAwareRepositories()
     {
-        $pager = $this->createMock(PagerInterface::class);
+        $createMockFn = method_exists($this, 'createMock') ? 'createMock' : 'getMock';
 
-        $em = $this->createMock(EntityManagerInterface::class);
+        $pager = $this->$createMockFn('KG\Pager\PagerInterface');
 
-        $repository = $this->createMock(PagerAwareInterface::class);
+        $em = $this->$createMockFn('Doctrine\ORM\EntityManagerInterface');
+
+        $repository = $this->$createMockFn('KG\Bundle\PagerBundle\Doctrine\PagerAwareInterface');
         $repository
             ->expects($this->once())
             ->method('setPager')
             ->with($this->identicalTo($pager))
         ;
 
-        $parent = $this->createMock(RepositoryFactory::class);
+        $parent = $this->$createMockFn('Doctrine\ORM\Repository\RepositoryFactory');
         $parent
             ->expects($this->once())
             ->method('getRepository')
@@ -38,14 +35,20 @@ class PagerAwareRepositoryFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testPagerNotSetToNativeRepositories()
     {
-        $pager = $this->createMock(PagerInterface::class);
+        $createMockFn = method_exists($this, 'createMock') ? 'createMock' : 'getMock';
 
-        $em = $this->createMock(EntityManagerInterface::class);
+        $pager = $this->$createMockFn('KG\Pager\PagerInterface');
 
-        $repository = $this->createMock(EntityRepository::class);
+        $em = $this->$createMockFn('Doctrine\ORM\EntityManagerInterface');
+
+        $repository = $this
+            ->getMockBuilder('Doctrine\ORM\EntityRepository')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
 
         $parent = $this
-            ->getMockBuilder(RepositoryFactory::class)
+            ->getMockBuilder('Doctrine\ORM\Repository\RepositoryFactory')
             ->disableOriginalConstructor()
             ->getMock()
         ;
