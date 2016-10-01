@@ -6,6 +6,12 @@ KGPagerBundle
 KGPagerBundle integrates [kgilden/pager](https://github.com/kgilden/pager) with
 the Symfony framework.
 
+NB! This package is abandoned
+-----------------------------
+
+The bundle was merged into the underyling library instead. Please use directly
+[kgilden/pager](https://github.com/kgilden/pager) in your projects.
+
 Usage
 -----
 
